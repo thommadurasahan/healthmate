@@ -30,11 +30,12 @@ export default function SignUp() {
   const searchParams = useSearchParams()
   const roleParam = searchParams.get('role')
 
-  useState(() => {
+  // Initialize role based on URL parameter
+  React.useEffect(() => {
     if (roleParam && ['PATIENT', 'PHARMACY'].includes(roleParam)) {
       setFormData(prev => ({ ...prev, role: roleParam }))
     }
-  })
+  }, [roleParam])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
