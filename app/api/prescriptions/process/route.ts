@@ -16,7 +16,7 @@ import { spawn } from 'child_process'
 async function extractMedicinesFromPrescription(filePath: string, mimeType: string) {
   return new Promise((resolve) => {
     try {
-      const pythonPath = '/app/ocr_env/bin/python'
+      const pythonPath = 'python3' // Use system python since we installed globally
       const scriptPath = '/app/ocr_processor.py'
       
       const pythonProcess = spawn(pythonPath, [scriptPath, filePath, mimeType])
