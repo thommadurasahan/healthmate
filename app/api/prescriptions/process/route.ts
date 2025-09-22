@@ -5,39 +5,66 @@ import { prisma } from '@/lib/db'
 import { join } from 'path'
 import { readFile } from 'fs/promises'
 
-// Mock implementation first - will replace with Emergent LLM integration
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/db'
+import { join } from 'path'
+import { spawn } from 'child_process'
+
+// Real OCR implementation using Emergent LLM
 async function extractMedicinesFromPrescription(filePath: string, mimeType: string) {
-  try {
-    // For now, return mock data - we'll integrate Emergent LLM next
-    const mockMedicines = [
-      {
-        name: 'Paracetamol',
-        dosage: '500mg',
-        frequency: 'Twice daily',
-        duration: '5 days',
-        instructions: 'Take after meals'
-      },
-      {
-        name: 'Amoxicillin',
-        dosage: '250mg',
-        frequency: 'Three times daily',
-        duration: '7 days',
-        instructions: 'Take with water'
-      }
-    ]
-    
-    return {
-      success: true,
-      medicines: mockMedicines,
-      extractedText: 'Mock prescription text for development'
+  return new Promise((resolve) => {
+    try {
+      const pythonPath = '/app/ocr_env/bin/python'
+      const scriptPath = '/app/ocr_processor.py'
+      
+      const pythonProcess = spawn(pythonPath, [scriptPath, filePath, mimeType])
+      
+      let outputData = ''
+      let errorData = ''
+      
+      pythonProcess.stdout.on('data', (data) => {
+        outputData += data.toString()
+      })
+      
+      pythonProcess.stderr.on('data', (data) => {
+        errorData += data.toString()
+      })
+      
+      pythonProcess.on('close', (code) => {
+        if (code === 0) {
+          try {
+            const result = JSON.parse(outputData)
+            resolve(result)
+          } catch (parseError) {
+            resolve({
+              success: false,
+              error: `Failed to parse OCR result: ${parseError.message}`
+            })
+          }
+        } else {
+          resolve({
+            success: false,
+            error: `OCR process failed with code ${code}: ${errorData}`
+          })
+        }
+      })
+      
+      pythonProcess.on('error', (error) => {
+        resolve({
+          success: false,
+          error: `Failed to start OCR process: ${error.message}`
+        })
+      })
+      
+    } catch (error) {
+      resolve({
+        success: false,
+        error: `OCR processing error: ${error.message}`
+      })
     }
-  } catch (error) {
-    console.error('OCR processing error:', error)
-    return {
-      success: false,
-      error: 'Failed to process prescription'
-    }
-  }
+  })
 }
 
 export async function POST(request: NextRequest) {
