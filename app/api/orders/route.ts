@@ -100,16 +100,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { pharmacyId, prescriptionId, orderItems, deliveryAddress, specialInstructions } = body
+    // Get patient profile
+    const patient = await prisma.patient.findUnique({
+      where: { userId: session.user.id }
+    })
 
-    if (!pharmacyId || !orderItems || orderItems.length === 0 || !deliveryAddress) {
+    if (!patient) {
+      return NextResponse.json({ error: 'Patient profile not found' }, { status: 404 })
+    }
+
+    const body = await request.json()
+    const { pharmacyId, prescriptionId, items, deliveryAddress, specialInstructions } = body
+
+    if (!pharmacyId || !items || items.length === 0 || !deliveryAddress) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
     // Calculate total amount
     let totalAmount = 0
-    for (const item of orderItems) {
+    for (const item of items) {
       const medicine = await prisma.medicine.findUnique({
         where: { id: item.medicineId }
       })
@@ -126,7 +135,7 @@ export async function POST(request: NextRequest) {
     const order = await prisma.order.create({
       data: {
         userId: session.user.id,
-        patientId: session.user.patient.id,
+        patientId: patient.id,
         pharmacyId,
         prescriptionId,
         totalAmount,
@@ -135,7 +144,7 @@ export async function POST(request: NextRequest) {
         deliveryAddress,
         specialInstructions,
         orderItems: {
-          create: orderItems.map((item: any) => ({
+          create: items.map((item: any) => ({
             medicineId: item.medicineId,
             quantity: item.quantity,
             unitPrice: item.unitPrice,
