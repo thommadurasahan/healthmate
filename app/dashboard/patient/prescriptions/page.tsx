@@ -217,6 +217,18 @@ export default function PrescriptionsPage() {
                       View
                     </Button>
                     
+                    {prescription.status === 'UPLOADED' && (
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => handleProcessPrescription(prescription.id)}
+                        disabled={processing === prescription.id}
+                      >
+                        <Zap className="h-4 w-4 mr-1" />
+                        {processing === prescription.id ? 'Processing...' : 'Process'}
+                      </Button>
+                    )}
+                    
                     {prescription.status === 'PROCESSED' && (
                       <Button
                         size="sm"
