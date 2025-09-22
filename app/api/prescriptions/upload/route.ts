@@ -113,9 +113,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Get patient ID
+    const patient = await prisma.patient.findUnique({
+      where: { userId: session.user.id }
+    })
+
+    if (!patient) {
+      return NextResponse.json(
+        { error: 'Patient profile not found' },
+        { status: 404 }
+      )
+    }
+
     const prescriptions = await prisma.prescription.findMany({
       where: {
-        patientId: session.user.patient.id
+        patientId: patient.id
       },
       orderBy: {
         createdAt: 'desc'
