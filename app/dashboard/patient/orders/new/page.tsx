@@ -96,65 +96,13 @@ export default function NewOrderPage() {
 
   const fetchPharmacies = async () => {
     try {
-      // For now, use mock data - will replace with real API
-      const mockPharmacies: Pharmacy[] = [
-        {
-          id: '1',
-          name: 'MedPlus Pharmacy',
-          address: '123 Main St, City Center',
-          phone: '+1-555-0123',
-          isApproved: true,
-          medicines: [
-            {
-              id: 'med1',
-              name: 'Paracetamol',
-              description: 'Pain relief medication',
-              price: 5.99,
-              unit: 'tablet',
-              stock: 100,
-              isActive: true
-            },
-            {
-              id: 'med2',
-              name: 'Amoxicillin',
-              description: 'Antibiotic medication',
-              price: 12.99,
-              unit: 'capsule',
-              stock: 50,
-              isActive: true
-            }
-          ]
-        },
-        {
-          id: '2',
-          name: 'HealthFirst Pharmacy',
-          address: '456 Oak Ave, Downtown',
-          phone: '+1-555-0456',
-          isApproved: true,
-          medicines: [
-            {
-              id: 'med3',
-              name: 'Paracetamol',
-              description: 'Pain relief medication',
-              price: 4.99,
-              unit: 'tablet',
-              stock: 80,
-              isActive: true
-            },
-            {
-              id: 'med4',
-              name: 'Amoxicillin',
-              description: 'Antibiotic medication',
-              price: 11.99,
-              unit: 'capsule',
-              stock: 75,
-              isActive: true
-            }
-          ]
-        }
-      ]
-      
-      setPharmacies(mockPharmacies)
+      const response = await fetch('/api/pharmacies')
+      if (response.ok) {
+        const data = await response.json()
+        setPharmacies(data)
+      } else {
+        console.error('Failed to fetch pharmacies')
+      }
     } catch (error) {
       console.error('Failed to fetch pharmacies:', error)
     } finally {
