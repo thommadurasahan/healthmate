@@ -89,6 +89,7 @@ export default function SignUp() {
   }
 
   const isPharmacy = formData.role === 'PHARMACY'
+  const requiresAdditionalInfo = ['PHARMACY', 'DELIVERY_PARTNER', 'LABORATORY', 'DOCTOR'].includes(formData.role)
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 px-4 py-8">
