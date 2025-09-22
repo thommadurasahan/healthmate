@@ -48,9 +48,7 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    const doctors = await pri
-
-        .doctor.findMany({
+    const doctors = await prisma.doctor.findMany({
       where,
       include: {
         user: {
