@@ -351,16 +351,21 @@ model OrderItem {
 model Transaction {
   id            String            @id @default(cuid())
   userId        String
-  orderId       String
+  orderId       String?           // For medicine orders
+  labBookingId  String?           // For lab test bookings
+  appointmentId String?           // For doctor appointments
   type          TransactionType
   amount        Float
   status        TransactionStatus @default(PENDING)
   paymentMethod String           @default("MOCK_STRIPE")
   paymentId     String?          // Mock payment ID
+  description   String?
   createdAt     DateTime         @default(now())
   
-  user  User  @relation(fields: [userId], references: [id])
-  order Order @relation(fields: [orderId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
+  order       Order?       @relation(fields: [orderId], references: [id])
+  labBooking  LabBooking?  @relation(fields: [labBookingId], references: [id])
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
   
   @@map("transactions")
 }
