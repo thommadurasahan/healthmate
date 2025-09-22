@@ -48,7 +48,7 @@ export default function PrescriptionsPage() {
 
     setUploading(true)
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('prescription', file)
 
     try {
       const response = await fetch('/api/prescriptions/upload', {
