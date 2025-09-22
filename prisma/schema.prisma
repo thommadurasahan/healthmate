@@ -176,13 +176,19 @@ model Transaction {
 enum UserRole {
   PATIENT
   PHARMACY
+  DELIVERY_PARTNER
+  LABORATORY
+  DOCTOR
   ADMIN
+  SYSTEM
 }
 
 enum AdminRole {
   SUPER_ADMIN
   PHARMACY_ADMIN
   PATIENT_ADMIN
+  LAB_ADMIN
+  DOCTOR_ADMIN
 }
 
 enum PrescriptionStatus {
@@ -197,14 +203,42 @@ enum OrderStatus {
   CONFIRMED
   PROCESSING
   READY_FOR_DELIVERY
+  OUT_FOR_DELIVERY
   DELIVERED
   CANCELLED
+}
+
+enum DeliveryStatus {
+  PENDING
+  ASSIGNED
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum LabTestStatus {
+  BOOKED
+  SAMPLE_COLLECTED
+  IN_PROGRESS
+  COMPLETED
+  REPORT_READY
 }
 
 enum TransactionType {
   PAYMENT
   COMMISSION
   PAYOUT
+  REFUND
 }
 
 enum TransactionStatus {
@@ -212,4 +246,13 @@ enum TransactionStatus {
   COMPLETED
   FAILED
   REFUNDED
+}
+
+enum NotificationType {
+  ORDER_UPDATE
+  APPOINTMENT_REMINDER
+  LAB_REPORT_READY
+  DELIVERY_UPDATE
+  PAYMENT_CONFIRMATION
+  SYSTEM_ALERT
 }
