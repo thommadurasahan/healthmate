@@ -316,6 +316,8 @@ model Order {
   commissionRate Float       @default(0.05) // 5% default commission
   commissionAmount Float
   netAmount      Float       // Amount after commission deduction
+  deliveryAddress String
+  specialInstructions String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   
@@ -327,6 +329,7 @@ model Order {
   // Relations
   orderItems   OrderItem[]
   transactions Transaction[]
+  delivery     Delivery?
   
   @@map("orders")
 }
