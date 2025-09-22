@@ -82,6 +82,80 @@ model Admin {
   @@map("admins")
 }
 
+model DeliveryPartner {
+  id           String  @id @default(cuid())
+  userId       String  @unique
+  vehicleType  String
+  licenseNumber String
+  phone        String
+  address      String
+  latitude     Float?
+  longitude    Float?
+  isAvailable  Boolean @default(true)
+  isApproved   Boolean @default(false)
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Relations
+  deliveries Delivery[]
+  
+  @@map("delivery_partners")
+}
+
+model Laboratory {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  name        String
+  address     String
+  phone       String
+  license     String
+  latitude    Float?
+  longitude   Float?
+  isApproved  Boolean @default(false)
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Relations
+  labTests    LabTest[]
+  labBookings LabBooking[]
+  
+  @@map("laboratories")
+}
+
+model Doctor {
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  specialization String
+  qualifications String
+  experience     Int     // years
+  consultationFee Float
+  phone          String
+  address        String?
+  license        String
+  isApproved     Boolean @default(false)
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Relations
+  availabilities DoctorAvailability[]
+  appointments   Appointment[]
+  
+  @@map("doctors")
+}
+
+model DoctorAvailability {
+  id        String   @id @default(cuid())
+  doctorId  String
+  dayOfWeek Int      // 0-6 (Sunday to Saturday)
+  startTime String   // HH:MM format
+  endTime   String   // HH:MM format
+  isActive  Boolean  @default(true)
+  
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  
+  @@map("doctor_availabilities")
+}
+
 model Medicine {
   id          String  @id @default(cuid())
   pharmacyId  String
