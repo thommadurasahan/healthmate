@@ -16,22 +16,40 @@ export default withAuth(
         
         // Protected routes need authentication
         if (pathname.startsWith('/dashboard')) {
+          if (!token) return false
+          
+          // Check role-based access
+          if (pathname.startsWith('/dashboard/admin')) {
+            return token?.role === 'ADMIN'
+          }
+          if (pathname.startsWith('/dashboard/patient')) {
+            return token?.role === 'PATIENT'
+          }
+          if (pathname.startsWith('/dashboard/pharmacy')) {
+            return token?.role === 'PHARMACY'
+          }
+          if (pathname.startsWith('/dashboard/delivery')) {
+            return token?.role === 'DELIVERY_PARTNER'
+          }
+          if (pathname.startsWith('/dashboard/laboratory')) {
+            return token?.role === 'LABORATORY'
+          }
+          if (pathname.startsWith('/dashboard/doctor')) {
+            return token?.role === 'DOCTOR'
+          }
+          
           return !!token
         }
         
-        // Admin routes
-        if (pathname.startsWith('/admin')) {
-          return token?.role === 'ADMIN'
-        }
-        
-        // Pharmacy routes
-        if (pathname.startsWith('/pharmacy')) {
-          return token?.role === 'PHARMACY'
-        }
-        
-        // Patient routes
-        if (pathname.startsWith('/patient')) {
-          return token?.role === 'PATIENT'
+        // API routes
+        if (pathname.startsWith('/api')) {
+          // Admin API routes
+          if (pathname.startsWith('/api/admin')) {
+            return token?.role === 'ADMIN'
+          }
+          
+          // Most API routes need authentication
+          return !!token
         }
         
         return !!token
@@ -41,5 +59,9 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/pharmacy/:path*', '/patient/:path*']
+  matcher: [
+    '/dashboard/:path*', 
+    '/api/:path*',
+    '/((?!_next|static|favicon.ico).*)'
+  ]
 }
