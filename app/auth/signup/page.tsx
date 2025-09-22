@@ -15,11 +15,23 @@ export default function SignUp() {
     password: '',
     confirmPassword: '',
     role: 'PATIENT',
-    // Additional fields for pharmacy
+    // Pharmacy fields
     pharmacyName: '',
     address: '',
     phone: '',
-    license: ''
+    license: '',
+    // Delivery Partner fields
+    vehicleType: '',
+    licenseNumber: '',
+    // Laboratory fields
+    laboratoryName: '',
+    labLicense: '',
+    // Doctor fields
+    specialization: '',
+    qualifications: '',
+    experience: '',
+    consultationFee: '',
+    doctorLicense: ''
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
