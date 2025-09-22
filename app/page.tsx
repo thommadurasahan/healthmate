@@ -22,6 +22,15 @@ export default function Home() {
         case 'PHARMACY':
           router.push('/dashboard/pharmacy')
           break
+        case 'DELIVERY_PARTNER':
+          router.push('/dashboard/delivery')
+          break
+        case 'LABORATORY':
+          router.push('/dashboard/laboratory')
+          break
+        case 'DOCTOR':
+          router.push('/dashboard/doctor')
+          break
         case 'ADMIN':
           router.push('/dashboard/admin')
           break
