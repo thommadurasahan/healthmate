@@ -5,7 +5,29 @@ import { prisma } from '@/lib/db'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, password, role, pharmacyName, address, phone, license } = body
+    const { 
+      name, 
+      email, 
+      password, 
+      role, 
+      // Pharmacy fields
+      pharmacyName, 
+      address, 
+      phone, 
+      license,
+      // Delivery Partner fields
+      vehicleType,
+      licenseNumber,
+      // Laboratory fields
+      laboratoryName,
+      labLicense,
+      // Doctor fields
+      specialization,
+      qualifications,
+      experience,
+      consultationFee,
+      doctorLicense
+    } = body
 
     // Validate required fields
     if (!name || !email || !password || !role) {
@@ -36,6 +58,7 @@ export async function POST(request: NextRequest) {
       email,
       password: hashedPassword,
       role,
+      isApproved: role === 'PATIENT' // Patients are auto-approved
     }
 
     if (role === 'PATIENT') {
@@ -59,12 +82,70 @@ export async function POST(request: NextRequest) {
           isApproved: false // Requires admin approval
         }
       }
+    } else if (role === 'DELIVERY_PARTNER') {
+      if (!vehicleType || !licenseNumber || !phone || !address) {
+        return NextResponse.json(
+          { error: 'Missing delivery partner information' },
+          { status: 400 }
+        )
+      }
+      
+      userData.deliveryPartner = {
+        create: {
+          vehicleType,
+          licenseNumber,
+          phone,
+          address,
+          isApproved: false
+        }
+      }
+    } else if (role === 'LABORATORY') {
+      if (!laboratoryName || !address || !phone || !labLicense) {
+        return NextResponse.json(
+          { error: 'Missing laboratory information' },
+          { status: 400 }
+        )
+      }
+      
+      userData.laboratory = {
+        create: {
+          name: laboratoryName,
+          address,
+          phone,
+          license: labLicense,
+          isApproved: false
+        }
+      }
+    } else if (role === 'DOCTOR') {
+      if (!specialization || !qualifications || !experience || !consultationFee || !doctorLicense || !phone) {
+        return NextResponse.json(
+          { error: 'Missing doctor information' },
+          { status: 400 }
+        )
+      }
+      
+      userData.doctor = {
+        create: {
+          specialization,
+          qualifications,
+          experience: parseInt(experience),
+          consultationFee: parseFloat(consultationFee),
+          phone,
+          license: doctorLicense,
+          isApproved: false
+        }
+      }
     } else if (role === 'ADMIN') {
       userData.admin = {
         create: {
           role: 'SUPER_ADMIN'
         }
       }
+    } else {
+      return NextResponse.json(
+        { error: 'Invalid role specified' },
+        { status: 400 }
+      )
     }
 
     const user = await prisma.user.create({
@@ -72,6 +153,9 @@ export async function POST(request: NextRequest) {
       include: {
         patient: true,
         pharmacy: true,
+        deliveryPartner: true,
+        laboratory: true,
+        doctor: true,
         admin: true
       }
     })
