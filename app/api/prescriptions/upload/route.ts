@@ -105,3 +105,26 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session || session.user.role !== 'PATIENT') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const prescriptions = await prisma.prescription.findMany({
+      where: {
+        patientId: session.user.patient.id
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return NextResponse.json(prescriptions)
+  } catch (error) {
+    console.error('Error fetching prescriptions:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
