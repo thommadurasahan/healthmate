@@ -23,6 +23,7 @@ export default function PrescriptionsPage() {
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
+  const [processing, setProcessing] = useState<string | null>(null)
 
   useEffect(() => {
     fetchPrescriptions()
