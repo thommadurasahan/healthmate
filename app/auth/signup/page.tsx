@@ -102,6 +102,9 @@ export default function SignUp() {
               >
                 <option value="PATIENT">Patient</option>
                 <option value="PHARMACY">Pharmacy</option>
+                <option value="DELIVERY_PARTNER">Delivery Partner</option>
+                <option value="LABORATORY">Laboratory</option>
+                <option value="DOCTOR">Doctor</option>
               </select>
             </div>
 
