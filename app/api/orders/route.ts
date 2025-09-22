@@ -19,9 +19,21 @@ export async function GET(request: NextRequest) {
 
     // Filter orders based on user role
     if (session.user.role === 'PATIENT') {
-      where.patientId = session.user.patient.id
+      const patient = await prisma.patient.findUnique({
+        where: { userId: session.user.id }
+      })
+      if (!patient) {
+        return NextResponse.json({ error: 'Patient profile not found' }, { status: 404 })
+      }
+      where.patientId = patient.id
     } else if (session.user.role === 'PHARMACY') {
-      where.pharmacyId = session.user.pharmacy.id
+      const pharmacy = await prisma.pharmacy.findUnique({
+        where: { userId: session.user.id }
+      })
+      if (!pharmacy) {
+        return NextResponse.json({ error: 'Pharmacy profile not found' }, { status: 404 })
+      }
+      where.pharmacyId = pharmacy.id
     } else if (session.user.role === 'ADMIN') {
       // Admins can see all orders
     } else {
