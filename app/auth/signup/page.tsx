@@ -212,6 +212,233 @@ export default function SignUp() {
               </>
             )}
 
+            {/* Delivery Partner fields */}
+            {formData.role === 'DELIVERY_PARTNER' && (
+              <>
+                <div className="space-y-2">
+                  <label htmlFor="vehicleType" className="text-sm font-medium">
+                    Vehicle Type
+                  </label>
+                  <select
+                    id="vehicleType"
+                    className="w-full h-10 px-3 py-2 border border-input bg-transparent rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    value={formData.vehicleType}
+                    onChange={(e) => setFormData({ ...formData, vehicleType: e.target.value })}
+                    required
+                  >
+                    <option value="">Select Vehicle Type</option>
+                    <option value="MOTORCYCLE">Motorcycle</option>
+                    <option value="CAR">Car</option>
+                    <option value="VAN">Van</option>
+                    <option value="BICYCLE">Bicycle</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="licenseNumber" className="text-sm font-medium">
+                      License Number
+                    </label>
+                    <Input
+                      id="licenseNumber"
+                      type="text"
+                      placeholder="Driving license number"
+                      value={formData.licenseNumber}
+                      onChange={(e) => setFormData({ ...formData, licenseNumber: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="text-sm font-medium">
+                      Phone
+                    </label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="Phone number"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="address" className="text-sm font-medium">
+                    Address
+                  </label>
+                  <Input
+                    id="address"
+                    type="text"
+                    placeholder="Your address"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    required
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Laboratory fields */}
+            {formData.role === 'LABORATORY' && (
+              <>
+                <div className="space-y-2">
+                  <label htmlFor="laboratoryName" className="text-sm font-medium">
+                    Laboratory Name
+                  </label>
+                  <Input
+                    id="laboratoryName"
+                    type="text"
+                    placeholder="Enter laboratory name"
+                    value={formData.laboratoryName}
+                    onChange={(e) => setFormData({ ...formData, laboratoryName: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="address" className="text-sm font-medium">
+                    Address
+                  </label>
+                  <Input
+                    id="address"
+                    type="text"
+                    placeholder="Laboratory address"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="text-sm font-medium">
+                      Phone
+                    </label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="Phone number"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="labLicense" className="text-sm font-medium">
+                      License No.
+                    </label>
+                    <Input
+                      id="labLicense"
+                      type="text"
+                      placeholder="Lab license number"
+                      value={formData.labLicense}
+                      onChange={(e) => setFormData({ ...formData, labLicense: e.target.value })}
+                      required
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Doctor fields */}
+            {formData.role === 'DOCTOR' && (
+              <>
+                <div className="space-y-2">
+                  <label htmlFor="specialization" className="text-sm font-medium">
+                    Specialization
+                  </label>
+                  <Input
+                    id="specialization"
+                    type="text"
+                    placeholder="e.g., Cardiology, Dermatology"
+                    value={formData.specialization}
+                    onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="qualifications" className="text-sm font-medium">
+                    Qualifications
+                  </label>
+                  <Input
+                    id="qualifications"
+                    type="text"
+                    placeholder="e.g., MBBS, MD"
+                    value={formData.qualifications}
+                    onChange={(e) => setFormData({ ...formData, qualifications: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="experience" className="text-sm font-medium">
+                      Experience (Years)
+                    </label>
+                    <Input
+                      id="experience"
+                      type="number"
+                      placeholder="Years of experience"
+                      value={formData.experience}
+                      onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                      required
+                      min="0"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="consultationFee" className="text-sm font-medium">
+                      Consultation Fee ($)
+                    </label>
+                    <Input
+                      id="consultationFee"
+                      type="number"
+                      placeholder="Fee per consultation"
+                      value={formData.consultationFee}
+                      onChange={(e) => setFormData({ ...formData, consultationFee: e.target.value })}
+                      required
+                      min="0"
+                      step="0.01"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="text-sm font-medium">
+                      Phone
+                    </label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="Phone number"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="doctorLicense" className="text-sm font-medium">
+                      Medical License
+                    </label>
+                    <Input
+                      id="doctorLicense"
+                      type="text"
+                      placeholder="Medical license number"
+                      value={formData.doctorLicense}
+                      onChange={(e) => setFormData({ ...formData, doctorLicense: e.target.value })}
+                      required
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
             {/* Password fields */}
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
