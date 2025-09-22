@@ -71,6 +71,34 @@ export default function PrescriptionsPage() {
     }
   }
 
+  const handleProcessPrescription = async (prescriptionId: string) => {
+    setProcessing(prescriptionId)
+    
+    try {
+      const response = await fetch('/api/prescriptions/process', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prescriptionId })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        alert('Prescription processed successfully! You can now order medicines.')
+        fetchPrescriptions()
+      } else {
+        const error = await response.json()
+        alert(error.error || 'Failed to process prescription')
+      }
+    } catch (error) {
+      console.error('Processing error:', error)
+      alert('Failed to process prescription')
+    } finally {
+      setProcessing(null)
+    }
+  }
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'UPLOADED':
