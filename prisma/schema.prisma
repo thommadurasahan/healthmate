@@ -184,6 +184,7 @@ model Prescription {
   fileSize  Int
   mimeType  String
   status    PrescriptionStatus @default(UPLOADED)
+  ocrData   String?  // JSON string of extracted medicines
   createdAt DateTime @default(now())
   
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
@@ -192,6 +193,113 @@ model Prescription {
   orders Order[]
   
   @@map("prescriptions")
+}
+
+model LabTest {
+  id           String  @id @default(cuid())
+  laboratoryId String
+  name         String
+  description  String?
+  price        Float
+  duration     String  // e.g., "24 hours", "3-5 days"
+  requirements String? // Special requirements like fasting
+  isActive     Boolean @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  laboratory Laboratory @relation(fields: [laboratoryId], references: [id], onDelete: Cascade)
+  
+  // Relations
+  labBookings LabBooking[]
+  
+  @@map("lab_tests")
+}
+
+model LabBooking {
+  id               String        @id @default(cuid())
+  patientId        String
+  laboratoryId     String
+  labTestId        String
+  status           LabTestStatus @default(BOOKED)
+  scheduledDate    DateTime
+  sampleCollectedAt DateTime?
+  reportGeneratedAt DateTime?
+  reportFilePath   String?
+  totalAmount      Float
+  commissionRate   Float         @default(0.05)
+  commissionAmount Float
+  netAmount        Float
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  
+  patient    Patient    @relation(fields: [patientId], references: [id])
+  laboratory Laboratory @relation(fields: [laboratoryId], references: [id])
+  labTest    LabTest    @relation(fields: [labTestId], references: [id])
+  
+  // Relations
+  transactions Transaction[]
+  
+  @@map("lab_bookings")
+}
+
+model Appointment {
+  id              String            @id @default(cuid())
+  patientId       String
+  doctorId        String
+  scheduledAt     DateTime
+  duration        Int               @default(30) // minutes
+  status          AppointmentStatus @default(SCHEDULED)
+  consultationFee Float
+  commissionRate  Float             @default(0.05)
+  commissionAmount Float
+  netAmount       Float
+  meetingLink     String?           // For video consultations
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+  
+  // Relations
+  transactions Transaction[]
+  
+  @@map("appointments")
+}
+
+model Delivery {
+  id                String         @id @default(cuid())
+  orderId           String         @unique
+  deliveryPartnerId String?
+  pickupAddress     String
+  deliveryAddress   String
+  estimatedTime     DateTime?
+  actualPickupTime  DateTime?
+  actualDeliveryTime DateTime?
+  status            DeliveryStatus @default(PENDING)
+  deliveryFee       Float          @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  
+  order           Order            @relation(fields: [orderId], references: [id])
+  deliveryPartner DeliveryPartner? @relation(fields: [deliveryPartnerId], references: [id])
+  
+  @@map("deliveries")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  metadata  String?          // JSON string for additional data
+  createdAt DateTime         @default(now())
+  
+  user User @relation(fields: [userId], references: [id])
+  
+  @@map("notifications")
 }
 
 model Order {
