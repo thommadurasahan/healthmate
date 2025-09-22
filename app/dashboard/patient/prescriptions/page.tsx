@@ -1,80 +1,87 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Upload, FileText, X, Eye } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { useState, useEffect } from 'react'
+import { Upload, FileText, Eye, Download, ShoppingBag } from 'lucide-react'
+
+interface Prescription {
+  id: string
+  fileName: string
+  filePath: string
+  fileSize: number
+  mimeType: string
+  status: string
+  ocrData?: string
+  createdAt: string
+}
 
 export default function PrescriptionsPage() {
   const { data: session } = useSession()
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>([])
+  const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
-  const [uploadError, setUploadError] = useState('')
-  const [uploadSuccess, setUploadSuccess] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      // Validate file type
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
-      if (!allowedTypes.includes(file.type)) {
-        setUploadError('Please select a valid file (JPEG, PNG, or PDF)')
-        return
+  useEffect(() => {
+    fetchPrescriptions()
+  }, [])
+
+  const fetchPrescriptions = async () => {
+    try {
+      const response = await fetch('/api/prescriptions/upload')
+      if (response.ok) {
+        const data = await response.json()
+        setPrescriptions(data)
       }
-
-      // Validate file size (10MB max)
-      if (file.size > 10 * 1024 * 1024) {
-        setUploadError('File size should be less than 10MB')
-        return
-      }
-
-      setSelectedFile(file)
-      setUploadError('')
-      setUploadSuccess(false)
+    } catch (error) {
+      console.error('Failed to fetch prescriptions:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleUpload = async () => {
-    if (!selectedFile) return
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
 
     setUploading(true)
-    setUploadError('')
+    const formData = new FormData()
+    formData.append('file', file)
 
     try {
-      const formData = new FormData()
-      formData.append('prescription', selectedFile)
-
       const response = await fetch('/api/prescriptions/upload', {
         method: 'POST',
-        body: formData,
+        body: formData
       })
 
       if (response.ok) {
-        setUploadSuccess(true)
-        setSelectedFile(null)
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ''
-        }
+        fetchPrescriptions()
       } else {
-        const data = await response.json()
-        setUploadError(data.error || 'Upload failed')
+        const error = await response.json()
+        alert(error.error || 'Failed to upload prescription')
       }
     } catch (error) {
-      setUploadError('Upload failed. Please try again.')
+      console.error('Upload error:', error)
+      alert('Failed to upload prescription')
     } finally {
       setUploading(false)
     }
   }
 
-  const removeFile = () => {
-    setSelectedFile(null)
-    setUploadError('')
-    setUploadSuccess(false)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'UPLOADED':
+        return 'bg-blue-100 text-blue-800'
+      case 'PROCESSING':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'PROCESSED':
+        return 'bg-green-100 text-green-800'
+      case 'REJECTED':
+        return 'bg-red-100 text-red-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
     }
   }
 
@@ -86,176 +93,143 @@ export default function PrescriptionsPage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  // Mock prescription history
-  const prescriptionHistory = [
-    {
-      id: '1',
-      fileName: 'prescription_2024_01_15.pdf',
-      uploadDate: '2024-01-15',
-      status: 'PROCESSED',
-      pharmaciesFound: 3
-    },
-    {
-      id: '2',
-      fileName: 'prescription_2024_01_10.jpg',
-      uploadDate: '2024-01-10',
-      status: 'PROCESSING',
-      pharmaciesFound: 0
-    }
-  ]
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Upload Prescription</h1>
-        <p className="text-gray-600">
-          Upload your prescription to find medicines from nearby pharmacies
-        </p>
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">My Prescriptions</h1>
+          <p className="text-gray-600">Upload and manage your medical prescriptions</p>
+        </div>
+        <div className="relative">
+          <input
+            type="file"
+            accept="image/*,.pdf"
+            onChange={handleFileUpload}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            disabled={uploading}
+          />
+          <Button disabled={uploading}>
+            <Upload className="h-4 w-4 mr-2" />
+            {uploading ? 'Uploading...' : 'Upload Prescription'}
+          </Button>
+        </div>
       </div>
 
-      {/* Upload Section */}
+      {/* Upload Instructions */}
       <Card>
         <CardHeader>
-          <CardTitle>New Prescription</CardTitle>
-          <CardDescription>
-            Upload a clear image or PDF of your prescription. Supported formats: JPEG, PNG, PDF (Max 10MB)
-          </CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Upload Instructions
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          {/* File Upload Area */}
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".jpg,.jpeg,.png,.pdf"
-              onChange={handleFileSelect}
-              className="hidden"
-              id="prescription-upload"
-            />
-            <label
-              htmlFor="prescription-upload"
-              className="cursor-pointer block"
-            >
-              <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-lg font-medium text-gray-900 mb-2">
-                Click to upload prescription
-              </p>
-              <p className="text-sm text-gray-500">
-                or drag and drop your file here
-              </p>
-            </label>
-          </div>
-
-          {/* Selected File Display */}
-          {selectedFile && (
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <FileText className="h-8 w-8 text-primary" />
-                  <div>
-                    <p className="font-medium text-gray-900">{selectedFile.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {formatFileSize(selectedFile.size)}
-                    </p>
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={removeFile}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Error Message */}
-          {uploadError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-              {uploadError}
-            </div>
-          )}
-
-          {/* Success Message */}
-          {uploadSuccess && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
-              Prescription uploaded successfully! We'll process it and show you available medicines from nearby pharmacies.
-            </div>
-          )}
-
-          {/* Upload Button */}
-          <div className="flex justify-end">
-            <Button
-              onClick={handleUpload}
-              disabled={!selectedFile || uploading}
-              className="w-full sm:w-auto"
-            >
-              {uploading ? 'Uploading...' : 'Upload Prescription'}
-            </Button>
-          </div>
+        <CardContent>
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li>• Accepted formats: JPEG, PNG, PDF</li>
+            <li>• Maximum file size: 10MB</li>
+            <li>• Ensure the prescription is clear and readable</li>
+            <li>• Include doctor's signature and clinic stamp</li>
+            <li>• One prescription per file</li>
+          </ul>
         </CardContent>
       </Card>
 
-      {/* Prescription History */}
+      {/* Prescriptions List */}
       <Card>
         <CardHeader>
-          <CardTitle>Prescription History</CardTitle>
-          <CardDescription>Your previously uploaded prescriptions</CardDescription>
+          <CardTitle>Uploaded Prescriptions</CardTitle>
+          <CardDescription>Your uploaded prescription history</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {prescriptionHistory.map((prescription) => (
+            {prescriptions.map((prescription) => (
               <div
                 key={prescription.id}
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
               >
-                <div className="flex items-center space-x-3">
-                  <FileText className="h-8 w-8 text-primary" />
+                <div className="flex items-center space-x-4">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <FileText className="h-8 w-8 text-primary" />
+                  </div>
                   <div>
                     <p className="font-medium text-gray-900">
                       {prescription.fileName}
                     </p>
                     <p className="text-sm text-gray-500">
-                      Uploaded on {prescription.uploadDate}
+                      {formatFileSize(prescription.fileSize)} • {prescription.mimeType}
                     </p>
-                    <div className="flex items-center space-x-4 mt-1">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        prescription.status === 'PROCESSED' 
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {prescription.status}
-                      </span>
-                      {prescription.pharmaciesFound > 0 && (
-                        <span className="text-xs text-gray-500">
-                          {prescription.pharmaciesFound} pharmacies found
-                        </span>
-                      )}
-                    </div>
+                    <p className="text-xs text-gray-400">
+                      Uploaded: {new Date(prescription.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  {prescription.status === 'PROCESSED' && prescription.pharmaciesFound > 0 && (
-                    <Button size="sm">
-                      View Pharmacies
+
+                <div className="flex items-center space-x-4">
+                  <Badge className={getStatusColor(prescription.status)}>
+                    {prescription.status}
+                  </Badge>
+                  
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(prescription.filePath, '_blank')}
+                    >
+                      <Eye className="h-4 w-4 mr-1" />
+                      View
                     </Button>
-                  )}
+                    
+                    {prescription.status === 'PROCESSED' && (
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          // Navigate to pharmacy selection with prescription
+                          window.location.href = `/dashboard/patient/orders/new?prescriptionId=${prescription.id}`
+                        }}
+                      >
+                        <ShoppingBag className="h-4 w-4 mr-1" />
+                        Order Medicines
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
-          </div>
 
-          {prescriptionHistory.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No prescriptions uploaded yet</p>
-            </div>
-          )}
+            {prescriptions.length === 0 && (
+              <div className="text-center py-12">
+                <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No prescriptions uploaded yet
+                </h3>
+                <p className="text-gray-500 mb-4">
+                  Upload your first prescription to start ordering medicines
+                </p>
+                <div className="relative inline-block">
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={handleFileUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    disabled={uploading}
+                  />
+                  <Button disabled={uploading}>
+                    <Upload className="h-4 w-4 mr-2" />
+                    {uploading ? 'Uploading...' : 'Upload Your First Prescription'}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>
