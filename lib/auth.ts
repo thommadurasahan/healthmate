@@ -23,6 +23,9 @@ export const authOptions: NextAuthOptions = {
           include: {
             patient: true,
             pharmacy: true,
+            deliveryPartner: true,
+            laboratory: true,
+            doctor: true,
             admin: true
           }
         })
@@ -36,8 +39,12 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           role: user.role,
+          isApproved: user.isApproved,
           patient: user.patient,
           pharmacy: user.pharmacy,
+          deliveryPartner: user.deliveryPartner,
+          laboratory: user.laboratory,
+          doctor: user.doctor,
           admin: user.admin
         }
       }
@@ -47,8 +54,12 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role
+        token.isApproved = user.isApproved
         token.patient = user.patient
         token.pharmacy = user.pharmacy
+        token.deliveryPartner = user.deliveryPartner
+        token.laboratory = user.laboratory
+        token.doctor = user.doctor
         token.admin = user.admin
       }
       return token
@@ -57,8 +68,12 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.sub!
         session.user.role = token.role as string
+        session.user.isApproved = token.isApproved as boolean
         session.user.patient = token.patient as any
         session.user.pharmacy = token.pharmacy as any
+        session.user.deliveryPartner = token.deliveryPartner as any
+        session.user.laboratory = token.laboratory as any
+        session.user.doctor = token.doctor as any
         session.user.admin = token.admin as any
       }
       return session
