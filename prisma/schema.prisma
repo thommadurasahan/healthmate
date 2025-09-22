@@ -42,12 +42,15 @@ model Patient {
   phone    String?
   address  String?
   dateOfBirth DateTime?
+  emergencyContact String?
   
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   // Relations
-  prescriptions Prescription[]
-  orders        Order[]
+  prescriptions  Prescription[]
+  orders         Order[]
+  labBookings    LabBooking[]
+  appointments   Appointment[]
   
   @@map("patients")
 }
