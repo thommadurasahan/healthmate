@@ -16,17 +16,22 @@ model User {
   password  String
   name      String
   role      UserRole
+  isApproved Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Role-specific profiles
-  patient   Patient?
-  pharmacy  Pharmacy?
-  admin     Admin?
+  patient         Patient?
+  pharmacy        Pharmacy?
+  deliveryPartner DeliveryPartner?
+  laboratory      Laboratory?
+  doctor          Doctor?
+  admin           Admin?
 
   // Relations
-  orders      Order[]
-  transactions Transaction[]
+  orders        Order[]
+  transactions  Transaction[]
+  notifications Notification[]
 
   @@map("users")
 }
