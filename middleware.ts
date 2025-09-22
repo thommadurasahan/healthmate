@@ -43,6 +43,11 @@ export default withAuth(
         
         // API routes
         if (pathname.startsWith('/api')) {
+          // Public API routes that don't need authentication
+          if (pathname === '/api/admin/seed') {
+            return true
+          }
+          
           // Admin API routes
           if (pathname.startsWith('/api/admin')) {
             return token?.role === 'ADMIN'
