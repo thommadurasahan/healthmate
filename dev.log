@@ -5,28 +5,30 @@
  ⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
    ▲ Next.js 15.5.3 (Turbopack)
    - Local:        http://localhost:3001
-   - Network:      http://10.219.45.2:3001
+   - Network:      http://10.227.94.233:3001
    - Environments: .env
 
  ✓ Starting...
- ○ Compiling middleware ...
- ✓ Compiled middleware in 1865ms
- ✓ Ready in 3.3s
+  ✓ Compiled middleware in 1ms
  ✓ Compiled middleware in 1ms
- ✓ Compiled middleware in 1ms
- ✓ Compiled middleware in 0ms
- ✓ Compiled middleware in 1ms
- ✓ Compiled middleware in 58ms
- ○ Compiling / ...
- ✓ Compiled / in 24.4s
- GET / 200 in 4664ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 6.6s
- GET /api/auth/session 200 in 9196ms
- ○ Compiling /auth/signup ...
- ✓ Compiled /auth/signup in 2.2s
- GET /auth/signup 200 in 2710ms
- GET /api/auth/session 200 in 302ms
  ✓ Compiled middleware in 2ms
- ✓ Compiled middleware in 60ms
- HEAD / 200 in 1277ms
+ ✓ Compiled in 24ms
+ ○ Compiling / ...
+ ✓ Compiled / in 10.4s
+ GET / 200 in 11381ms
+   Reload env: .env
+ Compiling / ...
+ ✓ Compiled / in 11.2s
+ GET / 200 in 2390ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 3s
+ GET /api/auth/session 200 in 4714ms
+ ○ Compiling /auth/signup ...
+ ✓ Compiled /auth/signup in 1175ms
+ GET /auth/signup?role=PATIENT 200 in 1579ms
+ GET /api/auth/session 200 in 443ms
+ GET /auth/signup?role=PHARMACY 200 in 304ms
+ GET /api/auth/session 200 in 737ms
+ GET /auth/signup 200 in 357ms
+ GET /api/auth/session 200 in 363ms
+   Reload env: .env
