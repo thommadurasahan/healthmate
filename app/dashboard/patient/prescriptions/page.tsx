@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useState, useEffect } from 'react'
-import { Upload, FileText, Eye, Download, ShoppingBag } from 'lucide-react'
+import { Upload, FileText, Eye, Download, ShoppingBag, Zap } from 'lucide-react'
 
 interface Prescription {
   id: string
