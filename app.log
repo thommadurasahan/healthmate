@@ -1,39 +1,20 @@
-
-> nextjs@0.1.0 dev
-> next dev --turbopack
-
- ⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
+yarn run v1.22.22
+$ next dev --turbopack
    ▲ Next.js 15.5.3 (Turbopack)
-   - Local:        http://localhost:3001
-   - Network:      http://10.219.0.100:3001
-   - Environments: .env
+   - Local:        http://localhost:3000
+   - Network:      http://10.227.0.46:3000
+   - Environments: .env.local, .env
 
  ✓ Starting...
  ○ Compiling middleware ...
- ✓ Compiled middleware in 1085ms
- ✓ Ready in 2.4s
+ ✓ Compiled middleware in 910ms
+ ✓ Ready in 2.2s
  ○ Compiling / ...
- ✓ Compiled / in 6.7s
- GET / 200 in 7391ms
- ○ Compiling /auth/signin ...
- ✓ Compiled /auth/signin in 691ms
- GET /auth/signin 200 in 889ms
- ○ Compiling /auth/signup ...
- ✓ Compiled /auth/signup in 545ms
- GET /auth/signup 200 in 723ms
+ ✓ Compiled / in 5.4s
+ HEAD / 200 in 5842ms
+ GET / 200 in 200ms
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1401ms
- GET /api/auth/signin?callbackUrl=%2Fdashboard%2Fpatient 302 in 2642ms
- GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fpatient 200 in 165ms
- GET /api/auth/signin?callbackUrl=%2Fdashboard%2Fpharmacy 302 in 391ms
- GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fpharmacy 200 in 177ms
- ✓ Compiled /api/auth/register in 396ms
- GET /api/auth/register 405 in 670ms
- GET /api/auth/signin 302 in 312ms
- GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fpharmacy 200 in 207ms
- GET /api/auth/session 200 in 291ms
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/register 400 in 323ms
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/register 400 in 273ms
- GET / 200 in 247ms
+ ✓ Compiled /api/auth/[...nextauth] in 1303ms
+ GET /api/auth/session 200 in 2453ms
+ ○ Compiling /auth/signin ...
+ ✓ Compiled /auth/signin in 735ms
