@@ -88,13 +88,13 @@ const sidebarItems: SidebarItem[] = [
     icon: BarChart3,
     roles: ['ADMIN']
   },
-  // Common items
+  /*// Common items
   {
     name: 'Settings',
     href: '/dashboard/settings',
     icon: Settings,
     roles: ['PATIENT', 'PHARMACY', 'ADMIN']
-  }
+  }*/
 ]
 
 export function DashboardSidebar() {
