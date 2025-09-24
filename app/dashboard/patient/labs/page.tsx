@@ -59,6 +59,8 @@ export default function PatientLabsPage() {
   const [selectedTest, setSelectedTest] = useState<LabTest | null>(null)
   const [scheduledDate, setScheduledDate] = useState('')
   const [loading, setLoading] = useState(false)
+  const [laboratoriesLoading, setLaboratoriesLoading] = useState(true)
+  const [bookingsLoading, setBookingsLoading] = useState(true)
 
   useEffect(() => {
     fetchLaboratories()
@@ -66,6 +68,7 @@ export default function PatientLabsPage() {
   }, [])
 
   const fetchLaboratories = async () => {
+    setLaboratoriesLoading(true)
     try {
       // Mock data - replace with actual API call
       setLaboratories([
@@ -114,10 +117,13 @@ export default function PatientLabsPage() {
       ])
     } catch (error) {
       console.error('Error fetching laboratories:', error)
+    } finally {
+      setLaboratoriesLoading(false)
     }
   }
 
   const fetchLabBookings = async () => {
+    setBookingsLoading(true)
     try {
       // Mock data - replace with actual API call
       setLabBookings([
@@ -140,6 +146,8 @@ export default function PatientLabsPage() {
       ])
     } catch (error) {
       console.error('Error fetching lab bookings:', error)
+    } finally {
+      setBookingsLoading(false)
     }
   }
 
@@ -241,7 +249,45 @@ export default function PatientLabsPage() {
 
           {/* Laboratory List */}
           <div className="grid gap-6">
-            {filteredLabs.map((lab) => (
+            {laboratoriesLoading ? (
+              <div className="space-y-6">
+                {[...Array(2)].map((_, i) => (
+                  <Card key={i} className="animate-pulse overflow-hidden">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <div className="h-5 bg-gray-200 rounded w-48"></div>
+                            <div className="h-4 bg-gray-200 rounded w-12"></div>
+                          </div>
+                          <div className="h-4 bg-gray-200 rounded w-64"></div>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="h-4 bg-gray-200 rounded w-32"></div>
+                        <div className="space-y-3">
+                          {[...Array(2)].map((_, j) => (
+                            <div key={j} className="p-4 border rounded-lg space-y-3">
+                              <div className="flex justify-between items-start">
+                                <div className="flex-1 space-y-2">
+                                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                                  <div className="h-3 bg-gray-200 rounded w-full"></div>
+                                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                </div>
+                                <div className="h-6 bg-gray-200 rounded w-16"></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              filteredLabs.map((lab) => (
               <Card key={lab.id} className="overflow-hidden">
                 <CardHeader>
                   <div className="flex justify-between items-start">
@@ -305,7 +351,7 @@ export default function PatientLabsPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )))}
           </div>
 
           {/* Booking Form */}
@@ -372,7 +418,39 @@ export default function PatientLabsPage() {
 
       {activeTab === 'bookings' && (
         <div className="space-y-4">
-          {labBookings.length > 0 ? (
+          {bookingsLoading ? (
+            <div className="space-y-4">
+              {[...Array(2)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-2">
+                        <div className="h-5 bg-gray-200 rounded w-56"></div>
+                        <div className="h-4 bg-gray-200 rounded w-40"></div>
+                      </div>
+                      <div className="h-6 bg-gray-200 rounded w-20"></div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-1">
+                        <div className="h-3 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-200 rounded w-24"></div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-3 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-12"></div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-3 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : labBookings.length > 0 ? (
             labBookings.map((booking) => (
               <Card key={booking.id}>
                 <CardHeader>

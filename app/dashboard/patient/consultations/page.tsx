@@ -56,6 +56,8 @@ export default function PatientConsultationsPage() {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null)
   const [selectedDateTime, setSelectedDateTime] = useState('')
   const [loading, setLoading] = useState(false)
+  const [doctorsLoading, setDoctorsLoading] = useState(true)
+  const [appointmentsLoading, setAppointmentsLoading] = useState(true)
 
   useEffect(() => {
     fetchDoctors()
@@ -63,6 +65,7 @@ export default function PatientConsultationsPage() {
   }, [])
 
   const fetchDoctors = async () => {
+    setDoctorsLoading(true)
     try {
       const response = await fetch('/api/doctors')
       if (response.ok) {
@@ -71,10 +74,13 @@ export default function PatientConsultationsPage() {
       }
     } catch (error) {
       console.error('Error fetching doctors:', error)
+    } finally {
+      setDoctorsLoading(false)
     }
   }
 
   const fetchAppointments = async () => {
+    setAppointmentsLoading(true)  
     try {
       const response = await fetch('/api/appointments')
       if (response.ok) {
@@ -83,6 +89,8 @@ export default function PatientConsultationsPage() {
       }
     } catch (error) {
       console.error('Error fetching appointments:', error)
+    } finally {
+      setAppointmentsLoading(false)
     }
   }
 
@@ -190,7 +198,29 @@ export default function PatientConsultationsPage() {
 
           {/* Doctor List */}
           <div className="grid gap-6">
-            {filteredDoctors.map((doctor) => (
+            {doctorsLoading ? (
+              <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <Card key={i} className="animate-pulse">
+                    <CardHeader>
+                      <div className="flex items-start gap-4">
+                        <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                          <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="h-3 bg-gray-200 rounded"></div>
+                      <div className="h-3 bg-gray-200 rounded w-4/5"></div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              filteredDoctors.map((doctor) => (
               <Card 
                 key={doctor.id}
                 className={`cursor-pointer transition-colors ${
@@ -248,7 +278,7 @@ export default function PatientConsultationsPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )))}
           </div>
 
           {/* Booking Form */}
@@ -329,7 +359,39 @@ export default function PatientConsultationsPage() {
 
       {activeTab === 'appointments' && (
         <div className="space-y-4">
-          {appointments.length > 0 ? (
+          {appointmentsLoading ? (
+            <div className="space-y-4">
+              {[...Array(2)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-2">
+                        <div className="h-5 bg-gray-200 rounded w-48"></div>
+                        <div className="h-4 bg-gray-200 rounded w-32"></div>
+                      </div>
+                      <div className="h-6 bg-gray-200 rounded w-16"></div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-1">
+                        <div className="h-3 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-24"></div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-3 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-3 bg-gray-200 rounded w-12"></div>
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : appointments.length > 0 ? (
             appointments.map((appointment) => (
               <Card key={appointment.id}>
                 <CardHeader>

@@ -58,7 +58,7 @@ const sidebarItems: SidebarItem[] = [
     roles: ['PATIENT']
   },
   {
-    name: 'Consultations',
+    name: 'Appointments',
     href: '/dashboard/patient/consultations',
     icon: Stethoscope,
     roles: ['PATIENT']

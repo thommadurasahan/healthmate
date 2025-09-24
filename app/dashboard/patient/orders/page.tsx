@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -12,70 +13,61 @@ import {
   Package, 
   Truck,
   Eye,
-  Star
+  Star,
+  RefreshCw
 } from 'lucide-react'
 
+interface Order {
+  id: string
+  prescriptionId: string
+  pharmacy: {
+    name: string
+    address: string
+    phone: string
+  }
+  items: {
+    name: string
+    quantity: number
+    price: number
+  }[]
+  totalAmount: number
+  commissionAmount: number
+  netAmount: number
+  status: string
+  createdAt: string
+  updatedAt: string
+  deliveredAt?: string
+}
+
 export default function PatientOrdersPage() {
-  // Mock orders data
-  const [orders] = useState([
-    {
-      id: 'ORD-001',
-      prescriptionId: 'RX-001',
-      pharmacy: {
-        name: 'Green Cross Pharmacy',
-        address: '123 Main St, Downtown',
-        distance: 0.5,
-        rating: 4.8
-      },
-      items: [
-        { name: 'Paracetamol 500mg', quantity: 20, price: 5.99 },
-        { name: 'Amoxicillin 250mg', quantity: 10, price: 12.50 }
-      ],
-      totalAmount: 132.48,
-      commissionAmount: 6.62,
-      netAmount: 125.86,
-      status: 'DELIVERED',
-      createdAt: '2024-01-15',
-      deliveredAt: '2024-01-15'
-    },
-    {
-      id: 'ORD-002', 
-      prescriptionId: 'RX-002',
-      pharmacy: {
-        name: 'HealthPlus Pharmacy',
-        address: '456 Oak Ave, Midtown',
-        distance: 1.2,
-        rating: 4.6
-      },
-      items: [
-        { name: 'Cough Syrup', quantity: 1, price: 8.75 }
-      ],
-      totalAmount: 9.19,
-      commissionAmount: 0.44,
-      netAmount: 8.75,
-      status: 'PROCESSING',
-      createdAt: '2024-01-16'
-    },
-    {
-      id: 'ORD-003',
-      prescriptionId: 'RX-001',
-      pharmacy: {
-        name: 'MediCare Pharmacy',
-        address: '789 Pine Rd, Uptown',
-        distance: 2.1,
-        rating: 4.7
-      },
-      items: [
-        { name: 'Vitamin D3', quantity: 30, price: 15.99 },
-        { name: 'Calcium Tablets', quantity: 60, price: 22.50 }
-      ],
-      totalAmount: 40.49,
-      commissionAmount: 1.99,
-      netAmount: 38.50,
-      status: 'READY_FOR_DELIVERY',
-      createdAt: '2024-01-14'
+  const { data: session } = useSession()
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchOrders()
     }
-  ])
+  }, [session])
+
+  const fetchOrders = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/orders')
+      if (response.ok) {
+        const data = await response.json()
+        setOrders(data)
+      } else {
+        console.error('Failed to fetch orders')
+        setOrders([])
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+      setOrders([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -119,13 +111,27 @@ export default function PatientOrdersPage() {
     }).format(amount)
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">My Orders</h1>
-        <p className="text-gray-600">
-          Track your medicine orders and delivery status
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">My Orders</h1>
+          <p className="text-gray-600">
+            Track your medicine orders and delivery status
+          </p>
+        </div>
+        <Button variant="outline" size="sm" onClick={fetchOrders}>
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Refresh
+        </Button>
       </div>
 
       {/* Order Statistics */}
@@ -214,13 +220,8 @@ export default function PatientOrdersPage() {
                         <p className="font-medium">{order.pharmacy.name}</p>
                         <p className="text-sm text-gray-600">{order.pharmacy.address}</p>
                         <div className="flex items-center space-x-2 mt-1">
-                          <div className="flex items-center">
-                            <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                            <span className="text-sm ml-1">{order.pharmacy.rating}</span>
-                          </div>
-                          <span className="text-gray-300">•</span>
                           <span className="text-sm text-gray-600">
-                            {order.pharmacy.distance} km away
+                            {order.pharmacy.phone}
                           </span>
                         </div>
                       </div>
@@ -293,8 +294,8 @@ export default function PatientOrdersPage() {
             <p className="text-gray-500 mb-4">
               Upload a prescription to start ordering medicines
             </p>
-            <Button asChild>
-              <a href="/dashboard/patient/prescriptions">Upload Prescription</a>
+            <Button onClick={() => window.location.href = '/dashboard/patient/prescriptions'}>
+              Upload Prescription
             </Button>
           </CardContent>
         </Card>
