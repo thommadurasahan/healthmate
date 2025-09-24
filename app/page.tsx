@@ -59,7 +59,7 @@ export default function Home() {
           </div>
           <div className="flex space-x-4">
             <Link href="/auth/signin" className="cursor-pointer inline-block">
-              <Button variant="outline" className="cursor-pointer hover:text-primary transition-colors duration-300">Sign In</Button>
+              <Button variant="outline" className="cursor-pointer hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300">Sign In</Button>
             </Link>
           </div>
         </div>
