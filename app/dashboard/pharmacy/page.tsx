@@ -37,7 +37,7 @@ export default function PharmacyDashboard() {
       title: 'Delivery Requests',
       description: 'Manage delivery partner assignments',
       icon: MapPin,
-      href: '/dashboard/pharmacy/delivery',
+      href: '/dashboard/pharmacy/delivery-requests',
       color: 'bg-purple-500 hover:bg-purple-600'
     }
   ]
@@ -122,13 +122,13 @@ export default function PharmacyDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {quickActions.map((action) => (
             <Link key={action.title} href={action.href}>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer h-full hover:scale-105 hover:border-primary">
                 <CardHeader className="text-center">
-                  <div className={`inline-flex p-3 rounded-full text-white mb-2 ${action.color}`}>
+                  <div className={`inline-flex p-3 rounded-full text-white mb-2 ${action.color} transform transition-transform group-hover:scale-110`}>
                     <action.icon className="h-6 w-6" />
                   </div>
-                  <CardTitle className="text-lg">{action.title}</CardTitle>
-                  <CardDescription className="text-sm">
+                  <CardTitle className="text-lg font-semibold text-pharmacy-text">{action.title}</CardTitle>
+                  <CardDescription className="text-sm text-pharmacy-text-light">
                     {action.description}
                   </CardDescription>
                 </CardHeader>
@@ -192,9 +192,9 @@ export default function PharmacyDashboard() {
             <CardTitle>Recent Orders</CardTitle>
             <CardDescription>Latest orders from patients</CardDescription>
           </div>
-          <Button asChild>
-            <Link href="/dashboard/pharmacy/orders">View All</Link>
-          </Button>
+          <Link href="/dashboard/pharmacy/orders">
+            <Button>View All</Button>
+          </Link>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

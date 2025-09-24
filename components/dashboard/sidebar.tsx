@@ -10,7 +10,6 @@ import {
   Upload,
   Package,
   Users,
-  Settings,
   BarChart3,
   TestTube,
   Stethoscope,
@@ -78,7 +77,7 @@ const sidebarItems: SidebarItem[] = [
   },
   {
     name: 'Delivery Requests',
-    href: '/dashboard/pharmacy/delivery',
+    href: '/dashboard/pharmacy/delivery-requests',
     icon: MapPin,
     roles: ['PHARMACY']
   },
@@ -197,8 +196,8 @@ export function DashboardSidebar() {
                   className={cn(
                     'flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      ? 'pharmacy-active'
+                      : 'pharmacy-link hover:bg-pharmacy-hover'
                   )}
                 >
                   <item.icon className="h-5 w-5" />
