@@ -147,7 +147,7 @@ export default function Home() {
               <Card className="text-center hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group">
                 <CardHeader>
                   <UserCog className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-                  <CardTitle className="group-hover:text-primary transition-colors duration-300">Manage HealthMate</CardTitle>
+                  <CardTitle className="group-hover:text-primary transition-colors duration-300">Manage Platform</CardTitle>
                   <CardDescription className="group-hover:text-primary/80 transition-colors duration-300">
                     Maintain HealthMate platform effortlessly
                   </CardDescription>

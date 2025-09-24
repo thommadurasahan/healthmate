@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { AuthHeader } from '@/components/auth-header'
+import { AuthFooter } from '@/components/auth-footer'
 import { Heart, Eye, EyeOff } from 'lucide-react'
 
 export default function SignUp() {
@@ -92,8 +94,10 @@ export default function SignUp() {
   const requiresAdditionalInfo = ['PHARMACY', 'DELIVERY_PARTNER', 'LABORATORY', 'DOCTOR'].includes(formData.role)
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 px-4 py-8">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex flex-col">
+      <AuthHeader />
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 px-4 py-8">
+        <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <Heart className="h-12 w-12 text-primary fill-current" />
@@ -514,6 +518,8 @@ export default function SignUp() {
           </div>
         </CardContent>
       </Card>
+      </div>
+      <AuthFooter />
     </div>
   )
 }
