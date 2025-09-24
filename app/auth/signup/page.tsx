@@ -22,9 +22,6 @@ export default function SignUp() {
     address: '',
     phone: '',
     license: '',
-    // Delivery Partner fields
-    vehicleType: '',
-    licenseNumber: '',
     // Laboratory fields
     laboratoryName: '',
     labLicense: '',
@@ -33,7 +30,10 @@ export default function SignUp() {
     qualifications: '',
     experience: '',
     consultationFee: '',
-    doctorLicense: ''
+    doctorLicense: '',
+    // Delivery Partner fields
+    vehicleType: '',
+    licenseNumber: ''
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -46,7 +46,7 @@ export default function SignUp() {
 
   // Initialize role based on URL parameter
   React.useEffect(() => {
-    if (roleParam && ['PATIENT', 'PHARMACY'].includes(roleParam)) {
+    if (roleParam && ['PATIENT', 'PHARMACY', 'LABORATORY', 'DOCTOR', 'DELIVERY_PARTNER', 'ADMIN'].includes(roleParam)) {
       setFormData(prev => ({ ...prev, role: roleParam }))
     }
   }, [roleParam])
@@ -91,7 +91,26 @@ export default function SignUp() {
   }
 
   const isPharmacy = formData.role === 'PHARMACY'
-  const requiresAdditionalInfo = ['PHARMACY', 'DELIVERY_PARTNER', 'LABORATORY', 'DOCTOR'].includes(formData.role)
+  const requiresAdditionalInfo = ['PHARMACY', 'LABORATORY', 'DOCTOR', 'DELIVERY_PARTNER', 'ADMIN'].includes(formData.role)
+
+  const getRoleDisplayName = (role: string) => {
+    switch (role) {
+      case 'PATIENT':
+        return 'patient'
+      case 'PHARMACY':
+        return 'pharmacy'
+      case 'LABORATORY':
+        return 'laboratory'
+      case 'DOCTOR':
+        return 'doctor'
+      case 'DELIVERY_PARTNER':
+        return 'delivery partner'
+      case 'ADMIN':
+        return 'admin'
+      default:
+        return role.toLowerCase()
+    }
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -104,7 +123,7 @@ export default function SignUp() {
           </div>
           <CardTitle className="text-2xl">Join HealthMate</CardTitle>
           <CardDescription>
-            Create your account as a {formData.role.toLowerCase()}
+            Create your account as a {getRoleDisplayName(formData.role)}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -113,15 +132,17 @@ export default function SignUp() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Account Type</label>
               <select
+                title='role'
                 className="w-full h-10 px-3 py-2 border border-input bg-transparent rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               >
                 <option value="PATIENT">Patient</option>
                 <option value="PHARMACY">Pharmacy</option>
-                <option value="DELIVERY_PARTNER">Delivery Partner</option>
                 <option value="LABORATORY">Laboratory</option>
                 <option value="DOCTOR">Doctor</option>
+                <option value="DELIVERY_PARTNER">Delivery Partner</option>
+                <option value="ADMIN">Admin</option>
               </select>
             </div>
 
