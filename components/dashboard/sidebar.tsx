@@ -14,7 +14,14 @@ import {
   BarChart3,
   TestTube,
   Stethoscope,
-  MapPin
+  MapPin,
+  Calendar,
+  Clock,
+  FileText,
+  Truck,
+  DollarSign,
+  Activity,
+  Heart
 } from 'lucide-react'
 
 interface SidebarItem {
@@ -29,7 +36,7 @@ const sidebarItems: SidebarItem[] = [
     name: 'Dashboard',
     href: '/dashboard',
     icon: Home,
-    roles: ['PATIENT', 'PHARMACY', 'ADMIN']
+    roles: ['PATIENT', 'PHARMACY', 'LABORATORY', 'DOCTOR', 'DELIVERY_PARTNER', 'ADMIN']
   },
   // Patient items
   {
@@ -75,6 +82,81 @@ const sidebarItems: SidebarItem[] = [
     icon: MapPin,
     roles: ['PHARMACY']
   },
+  // Laboratory items
+  {
+    name: 'Test Catalog',
+    href: '/dashboard/laboratory/tests',
+    icon: TestTube,
+    roles: ['LABORATORY']
+  },
+  {
+    name: 'Lab Bookings',
+    href: '/dashboard/laboratory/bookings',
+    icon: Calendar,
+    roles: ['LABORATORY']
+  },
+  {
+    name: 'Test Results',
+    href: '/dashboard/laboratory/results',
+    icon: FileText,
+    roles: ['LABORATORY']
+  },
+  {
+    name: 'Reports',
+    href: '/dashboard/laboratory/reports',
+    icon: BarChart3,
+    roles: ['LABORATORY']
+  },
+  // Doctor items
+  {
+    name: 'Appointments',
+    href: '/dashboard/doctor/appointments',
+    icon: Calendar,
+    roles: ['DOCTOR']
+  },
+  {
+    name: 'Patient Consultations',
+    href: '/dashboard/doctor/consultations',
+    icon: Stethoscope,
+    roles: ['DOCTOR']
+  },
+  {
+    name: 'Availability',
+    href: '/dashboard/doctor/availability',
+    icon: Clock,
+    roles: ['DOCTOR']
+  },
+  {
+    name: 'Medical Records',
+    href: '/dashboard/doctor/records',
+    icon: FileText,
+    roles: ['DOCTOR']
+  },
+  // Delivery Partner items
+  {
+    name: 'Available Deliveries',
+    href: '/dashboard/delivery/available',
+    icon: Package,
+    roles: ['DELIVERY_PARTNER']
+  },
+  {
+    name: 'My Deliveries',
+    href: '/dashboard/delivery/orders',
+    icon: Truck,
+    roles: ['DELIVERY_PARTNER']
+  },
+  {
+    name: 'Earnings',
+    href: '/dashboard/delivery/earnings',
+    icon: DollarSign,
+    roles: ['DELIVERY_PARTNER']
+  },
+  {
+    name: 'Delivery History',
+    href: '/dashboard/delivery/history',
+    icon: Activity,
+    roles: ['DELIVERY_PARTNER']
+  },
   // Admin items
   {
     name: 'User Management',
@@ -87,14 +169,7 @@ const sidebarItems: SidebarItem[] = [
     href: '/dashboard/admin/analytics',
     icon: BarChart3,
     roles: ['ADMIN']
-  },
-  /*// Common items
-  {
-    name: 'Settings',
-    href: '/dashboard/settings',
-    icon: Settings,
-    roles: ['PATIENT', 'PHARMACY', 'ADMIN']
-  }*/
+  }
 ]
 
 export function DashboardSidebar() {
@@ -109,7 +184,7 @@ export function DashboardSidebar() {
   )
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-full">
+    <div className="w-64 bg-background border-r border-border h-full">
       <nav className="p-6">
         <ul className="space-y-2">
           {filteredItems.map((item) => {
@@ -122,8 +197,8 @@ export function DashboardSidebar() {
                   className={cn(
                     'flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-primary text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )}
                 >
                   <item.icon className="h-5 w-5" />
