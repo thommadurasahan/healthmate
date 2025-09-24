@@ -133,7 +133,7 @@ export default function SignUp() {
               <label className="text-sm font-medium">Account Type</label>
               <select
                 title='role'
-                className="w-full h-10 px-3 py-2 border border-input bg-transparent rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="w-full h-10 px-3 py-2 border border-input bg-background text-foreground rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&>option]:bg-background [&>option]:text-foreground"
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               >
@@ -247,7 +247,7 @@ export default function SignUp() {
                   </label>
                   <select
                     id="vehicleType"
-                    className="w-full h-10 px-3 py-2 border border-input bg-transparent rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="w-full h-10 px-3 py-2 border border-input bg-background text-foreground rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&>option]:bg-background [&>option]:text-foreground"
                     value={formData.vehicleType}
                     onChange={(e) => setFormData({ ...formData, vehicleType: e.target.value })}
                     required
