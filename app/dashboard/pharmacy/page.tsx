@@ -192,9 +192,9 @@ export default function PharmacyDashboard() {
             <CardTitle>Recent Orders</CardTitle>
             <CardDescription>Latest orders from patients</CardDescription>
           </div>
-          <Button asChild>
-            <Link href="/dashboard/pharmacy/orders">View All</Link>
-          </Button>
+          <Link href="/dashboard/pharmacy/orders">
+            <Button>View All</Button>
+          </Link>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

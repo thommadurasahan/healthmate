@@ -2,19 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { DeliveryStatus, NotificationType, UserRole } from '@prisma/client';
 
 interface DeliveryRequestBody {
   pickupAddress: string;
   deliveryNotes: string;
   urgencyLevel: 'normal' | 'urgent' | 'emergency';
   expectedPickupTime: string;
-}
-
-interface NotificationData {
-  type: 'DELIVERY_REQUEST';
-  title: string;
-  message: string;
-  role: 'DELIVERY_PARTNER';
 }
 
 interface SessionUser {
@@ -49,31 +43,41 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create the delivery request
-    const deliveryRequest = await prisma.deliveryRequest.create({
+    // Create the delivery
+    const delivery = await prisma.delivery.create({
       data: {
-        pharmacyId: pharmacy.id,
-        status: 'PENDING',
         pickupAddress,
-        deliveryNotes,
-        urgencyLevel: urgencyLevel as 'normal' | 'urgent' | 'emergency',
-        expectedPickupTime: new Date(expectedPickupTime),
+        deliveryAddress: '', // This will be updated when an order is created
+        status: DeliveryStatus.PENDING,
+        estimatedTime: new Date(expectedPickupTime),
+        order: {
+          create: {
+            userId: session.user.id,
+            patientId: '', // Will be set when order is processed
+            pharmacyId: pharmacy.id,
+            status: 'PENDING',
+            totalAmount: 0, // Will be calculated when medicines are added
+            commissionRate: 0.05,
+            commissionAmount: 0, // Will be calculated
+            netAmount: 0, // Will be calculated
+            deliveryAddress: '', // Will be set when order is processed
+            specialInstructions: deliveryNotes,
+          }
+        }
       },
     });
 
     // Create a notification for available delivery partners
-    const notificationData: NotificationData = {
-      type: 'DELIVERY_REQUEST',
-      title: 'New Delivery Request',
-      message: `New ${urgencyLevel} delivery request from ${pharmacy.name}`,
-      role: 'DELIVERY_PARTNER',
-    };
-
     await prisma.notification.create({
-      data: notificationData,
+      data: {
+        userId: session.user.id,
+        type: NotificationType.DELIVERY_UPDATE,
+        title: 'New Delivery Request',
+        message: `New delivery request from ${pharmacy.name}`,
+      },
     });
 
-    return NextResponse.json(deliveryRequest, { status: 201 });
+    return NextResponse.json(delivery, { status: 201 });
   } catch (error) {
     console.error('Error creating delivery request:', error);
     return NextResponse.json(
@@ -105,19 +109,23 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const deliveryRequests = await prisma.deliveryRequest.findMany({
+    // Find all deliveries associated with orders from this pharmacy
+    const deliveries = await prisma.delivery.findMany({
       where: {
-        pharmacyId: pharmacy.id,
+        order: {
+          pharmacyId: pharmacy.id
+        }
       },
       orderBy: {
         createdAt: 'desc',
       },
       include: {
         deliveryPartner: true,
+        order: true
       },
     });
 
-    return NextResponse.json(deliveryRequests);
+    return NextResponse.json(deliveries);
   } catch (error) {
     console.error('Error fetching delivery requests:', error);
     return NextResponse.json(
