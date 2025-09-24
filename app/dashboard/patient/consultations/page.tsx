@@ -165,8 +165,8 @@ export default function PatientConsultationsPage() {
           onClick={() => setActiveTab('book')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'book'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           Book Appointment
@@ -175,8 +175,8 @@ export default function PatientConsultationsPage() {
           onClick={() => setActiveTab('appointments')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'appointments'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           My Appointments
@@ -187,7 +187,7 @@ export default function PatientConsultationsPage() {
         <div className="space-y-6">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search doctors by name or specialization..."
               value={searchTerm}
@@ -239,10 +239,10 @@ export default function PatientConsultationsPage() {
                         <CardDescription className="text-base">
                           {doctor.specialization}
                         </CardDescription>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {doctor.experience} years experience
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted-foreground">
                           {doctor.qualifications}
                         </p>
                       </div>
@@ -251,7 +251,7 @@ export default function PatientConsultationsPage() {
                       <p className="text-2xl font-bold text-red-600">
                         ${doctor.consultationFee}
                       </p>
-                      <p className="text-sm text-gray-600">consultation</p>
+                      <p className="text-sm text-muted-foreground">consultation</p>
                     </div>
                   </div>
                 </CardHeader>
@@ -269,7 +269,7 @@ export default function PatientConsultationsPage() {
                             {getDayName(availability.dayOfWeek)}
                           </span>
                           <br />
-                          <span className="text-gray-600">
+                          <span className="text-muted-foreground">
                             {availability.startTime} - {availability.endTime}
                           </span>
                         </div>
@@ -301,7 +301,7 @@ export default function PatientConsultationsPage() {
                     onChange={(e) => setSelectedDateTime(e.target.value)}
                     min={new Date().toISOString().slice(0, 16)}
                   />
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Please choose a time within the doctor's available hours
                   </p>
                 </div>
@@ -413,18 +413,18 @@ export default function PatientConsultationsPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600">Scheduled:</p>
-                      <p className="font-medium">
+                      <p className="text-muted-foreground">Scheduled:</p>
+                      <p className="font-medium text-foreground">
                         {new Date(appointment.scheduledAt).toLocaleString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Duration:</p>
-                      <p className="font-medium">{appointment.duration} minutes</p>
+                      <p className="text-muted-foreground">Duration:</p>
+                      <p className="font-medium text-foreground">{appointment.duration} minutes</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Fee Paid:</p>
-                      <p className="font-medium">${appointment.consultationFee}</p>
+                      <p className="text-muted-foreground">Fee Paid:</p>
+                      <p className="font-medium text-foreground">${appointment.consultationFee}</p>
                     </div>
                   </div>
 
@@ -446,9 +446,9 @@ export default function PatientConsultationsPage() {
                   )}
 
                   {appointment.notes && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-medium mb-2">Doctor's Notes:</h4>
-                      <p className="text-sm text-gray-700">{appointment.notes}</p>
+                    <div className="bg-muted/50 p-4 rounded-lg">
+                      <h4 className="font-medium text-foreground mb-2">Doctor's Notes:</h4>
+                      <p className="text-sm text-muted-foreground">{appointment.notes}</p>
                     </div>
                   )}
                 </CardContent>
@@ -457,11 +457,11 @@ export default function PatientConsultationsPage() {
           ) : (
             <Card>
               <CardContent className="text-center py-8">
-                <Stethoscope className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <Stethoscope className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   No appointments yet
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Book your first consultation to get started
                 </p>
                 <Button onClick={() => setActiveTab('book')}>

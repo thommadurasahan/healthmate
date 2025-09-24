@@ -216,8 +216,8 @@ export default function PatientLabsPage() {
           onClick={() => setActiveTab('book')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'book'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           Book Test
@@ -226,8 +226,8 @@ export default function PatientLabsPage() {
           onClick={() => setActiveTab('bookings')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'bookings'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           My Bookings
@@ -238,7 +238,7 @@ export default function PatientLabsPage() {
         <div className="space-y-6">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search laboratories or tests..."
               value={searchTerm}
@@ -296,7 +296,7 @@ export default function PatientLabsPage() {
                         {lab.name}
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="text-sm text-gray-600">{lab.rating}</span>
+                          <span className="text-sm text-muted-foreground">{lab.rating}</span>
                         </div>
                       </CardTitle>
                       <CardDescription className="flex items-center gap-2 mt-1">
@@ -326,9 +326,9 @@ export default function PatientLabsPage() {
                         >
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
-                              <h5 className="font-medium">{test.name}</h5>
-                              <p className="text-sm text-gray-600 mt-1">{test.description}</p>
-                              <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                              <h5 className="font-medium text-foreground">{test.name}</h5>
+                              <p className="text-sm text-muted-foreground mt-1">{test.description}</p>
+                              <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                                 <span className="flex items-center gap-1">
                                   <Clock className="h-3 w-3" />
                                   {test.duration}
@@ -468,18 +468,18 @@ export default function PatientLabsPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600">Scheduled Date:</p>
-                      <p className="font-medium">
+                      <p className="text-muted-foreground">Scheduled Date:</p>
+                      <p className="font-medium text-foreground">
                         {new Date(booking.scheduledDate).toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Amount Paid:</p>
-                      <p className="font-medium">${booking.totalAmount}</p>
+                      <p className="text-muted-foreground">Amount Paid:</p>
+                      <p className="font-medium text-foreground">${booking.totalAmount}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Booking ID:</p>
-                      <p className="font-medium">#{booking.id.slice(-8)}</p>
+                      <p className="text-muted-foreground">Booking ID:</p>
+                      <p className="font-medium text-foreground">#{booking.id.slice(-8)}</p>
                     </div>
                   </div>
 
@@ -505,11 +505,11 @@ export default function PatientLabsPage() {
           ) : (
             <Card>
               <CardContent className="text-center py-8">
-                <TestTube className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <TestTube className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   No lab bookings yet
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Book your first lab test to get started
                 </p>
                 <Button onClick={() => setActiveTab('book')}>

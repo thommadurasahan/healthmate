@@ -135,8 +135,8 @@ export default function PrescriptionsPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">My Prescriptions</h1>
-          <p className="text-gray-600">Upload and manage your medical prescriptions</p>
+          <h1 className="text-2xl font-bold text-foreground">My Prescriptions</h1>
+          <p className="text-muted-foreground">Upload and manage your medical prescriptions</p>
         </div>
         <div className="relative">
           <input
@@ -162,7 +162,7 @@ export default function PrescriptionsPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="space-y-2 text-sm text-gray-600">
+          <ul className="space-y-2 text-sm text-muted-foreground">
             <li>• Accepted formats: JPEG, PNG, PDF</li>
             <li>• Maximum file size: 10MB</li>
             <li>• Ensure the prescription is clear and readable</li>
@@ -183,20 +183,20 @@ export default function PrescriptionsPage() {
             {prescriptions.map((prescription) => (
               <div
                 key={prescription.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50"
               >
                 <div className="flex items-center space-x-4">
                   <div className="p-2 bg-primary/10 rounded-lg">
                     <FileText className="h-8 w-8 text-primary" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-foreground">
                       {prescription.fileName}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       {formatFileSize(prescription.fileSize)} • {prescription.mimeType}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                       Uploaded: {new Date(prescription.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -248,11 +248,11 @@ export default function PrescriptionsPage() {
 
             {prescriptions.length === 0 && (
               <div className="text-center py-12">
-                <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <FileText className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   No prescriptions uploaded yet
                 </h3>
-                <p className="text-gray-500 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Upload your first prescription to start ordering medicines
                 </p>
                 <div className="relative inline-block">

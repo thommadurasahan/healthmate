@@ -123,8 +123,8 @@ export default function PatientOrdersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">My Orders</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-foreground">My Orders</h1>
+          <p className="text-muted-foreground">
             Track your medicine orders and delivery status
           </p>
         </div>
@@ -217,10 +217,10 @@ export default function PatientOrdersPage() {
                         <MapPin className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <p className="font-medium">{order.pharmacy.name}</p>
-                        <p className="text-sm text-gray-600">{order.pharmacy.address}</p>
+                        <p className="font-medium text-foreground">{order.pharmacy.name}</p>
+                        <p className="text-sm text-muted-foreground">{order.pharmacy.address}</p>
                         <div className="flex items-center space-x-2 mt-1">
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-muted-foreground">
                             {order.pharmacy.phone}
                           </span>
                         </div>
@@ -236,8 +236,8 @@ export default function PatientOrdersPage() {
                     {order.items.map((item, index) => (
                       <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
                         <div>
-                          <p className="font-medium">{item.name}</p>
-                          <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                          <p className="font-medium text-foreground">{item.name}</p>
+                          <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
                         </div>
                         <p className="font-medium">{formatCurrency(item.price * item.quantity)}</p>
                       </div>
@@ -252,7 +252,7 @@ export default function PatientOrdersPage() {
                       <span>Subtotal:</span>
                       <span>{formatCurrency(order.netAmount)}</span>
                     </div>
-                    <div className="flex justify-between text-sm text-gray-600">
+                    <div className="flex justify-between text-sm text-muted-foreground">
                       <span>Platform fee (5%):</span>
                       <span>{formatCurrency(order.commissionAmount)}</span>
                     </div>
@@ -289,9 +289,9 @@ export default function PatientOrdersPage() {
       {orders.length === 0 && (
         <Card>
           <CardContent className="text-center py-12">
-            <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
-            <p className="text-gray-500 mb-4">
+            <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-lg font-medium text-foreground mb-2">No orders yet</h3>
+            <p className="text-muted-foreground mb-4">
               Upload a prescription to start ordering medicines
             </p>
             <Button onClick={() => window.location.href = '/dashboard/patient/prescriptions'}>
