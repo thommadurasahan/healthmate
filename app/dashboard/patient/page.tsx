@@ -85,7 +85,7 @@ export default function PatientDashboard() {
         </p>
       </div>
 
-      {/* Quick Actions */}
+      {/* Quick Actions
       <div>
         <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -105,7 +105,7 @@ export default function PatientDashboard() {
             </Link>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
