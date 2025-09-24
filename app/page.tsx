@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
-import { Heart, ShoppingBag, TestTube, Stethoscope, MapPin, Shield } from 'lucide-react'
+import { Heart, ShoppingBag, TestTube, Stethoscope, MapPin, Shield, Truck, UserCog, Pill } from 'lucide-react'
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -58,11 +58,8 @@ export default function Home() {
             <h1 className="text-2xl font-bold text-primary">HealthMate</h1>
           </div>
           <div className="flex space-x-4">
-            <Link href="/auth/signin">
-              <Button variant="outline">Sign In</Button>
-            </Link>
-            <Link href="/auth/signup">
-              <Button>Get Started</Button>
+            <Link href="/auth/signin" className="cursor-pointer inline-block">
+              <Button variant="outline" className="cursor-pointer hover:text-primary transition-colors duration-300">Sign In</Button>
             </Link>
           </div>
         </div>
@@ -71,92 +68,92 @@ export default function Home() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary/5 to-primary/10 py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6 text-gray-900">
-            Your Digital <span className="text-primary">Healthcare</span> Partner
+          <h1 className="text-5xl font-bold mb-6 text-primary">
+            Your Digital Healthcare Partner
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Order medicines online, book lab tests, and consult with doctors - all in one secure platform. 
+            Order medicines online, book lab tests, and book doctors - All in one secure platform. 
             Healthcare made simple, accessible, and affordable.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup?role=PATIENT">
-              <Button size="lg" className="w-full sm:w-auto">
-                Get Started as Patient
-              </Button>
-            </Link>
-            <Link href="/auth/signup?role=PHARMACY">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                Join as Pharmacy
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Onboard Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose HealthMate?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Get Started with Us</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <ShoppingBag className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Medicine Ordering</CardTitle>
-                <CardDescription>
-                  Upload prescriptions and get medicines delivered from nearby pharmacies
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <Link href="/auth/signup?role=PATIENT">
+              <Card className="text-center hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group">
+                <CardHeader>
+                  <Heart className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="group-hover:text-primary transition-colors duration-300">I am a Patient</CardTitle>
+                  <CardDescription className="group-hover:text-primary/80 transition-colors duration-300">
+                    Get healthcare services at your convenience
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
+            
+            <Link href="/auth/signup?role=PHARMACY">
+              <Card className="text-center hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group">
+                <CardHeader>
+                  <Pill className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="group-hover:text-primary transition-colors duration-300">Manage Pharmacy</CardTitle>
+                  <CardDescription className="group-hover:text-primary/80 transition-colors duration-300">
+                    Accept medicine orders and manage inventory seamlessly
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <TestTube className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Lab Tests</CardTitle>
-                <CardDescription>
-                  Book lab tests online and get reports delivered digitally
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <Link href="/auth/signup?role=LABORATORY">
+              <Card className="text-center hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group">
+                <CardHeader>
+                  <TestTube className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="group-hover:text-primary transition-colors duration-300">Manage Lab</CardTitle>
+                  <CardDescription className="group-hover:text-primary/80 transition-colors duration-300">
+                    Provide laboratory services for patients
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <Stethoscope className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Doctor Consultations</CardTitle>
-                <CardDescription>
-                  Video consultations with qualified doctors at your convenience
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <Link href="/auth/signup?role=DOCTOR">
+              <Card className="text-center hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group">
+                <CardHeader>
+                  <Stethoscope className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="group-hover:text-primary transition-colors duration-300">I am a Doctor</CardTitle>
+                  <CardDescription className="group-hover:text-primary/80 transition-colors duration-300">
+                    Provide expert medical advice to your patients
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <MapPin className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Location-Based</CardTitle>
-                <CardDescription>
-                  Find nearest pharmacies and healthcare providers automatically
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <Link href="/auth/signup?role=DELIVERY_PARTNER">
+              <Card className="text-center hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group">
+                <CardHeader>
+                  <Truck className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="group-hover:text-primary transition-colors duration-300">I am a Driver</CardTitle>
+                  <CardDescription className="group-hover:text-primary/80 transition-colors duration-300">
+                    Deliver medicine orders to doorsteps
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Secure Payments</CardTitle>
-                <CardDescription>
-                  Safe and secure payment processing with transparent pricing
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <Heart className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Care Coordination</CardTitle>
-                <CardDescription>
-                  Seamless coordination between patients, pharmacies, and healthcare providers
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <Link href="/auth/signup?role=ADMIN">
+              <Card className="text-center hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group">
+                <CardHeader>
+                  <UserCog className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="group-hover:text-primary transition-colors duration-300">Manage HealthMate</CardTitle>
+                  <CardDescription className="group-hover:text-primary/80 transition-colors duration-300">
+                    Maintain HealthMate platform effortlessly
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>
@@ -167,16 +164,11 @@ export default function Home() {
           <div className="flex flex-col items-center space-y-4">
             <div className="flex items-center space-x-2">
               <Heart className="h-6 w-6 text-primary fill-current" />
-              <span className="text-lg font-semibold text-foreground">HealthMate</span>
+              <h1 className="text-lg font-bold text-primary">HealthMate</h1>
             </div>
             <p className="text-muted-foreground text-center">
               Making healthcare accessible, affordable, and efficient for everyone.
             </p>
-            <div className="flex space-x-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-primary">Privacy Policy</a>
-              <a href="#" className="hover:text-primary">Terms of Service</a>
-              <a href="#" className="hover:text-primary">Contact Us</a>
-            </div>
           </div>
         </div>
       </footer>
