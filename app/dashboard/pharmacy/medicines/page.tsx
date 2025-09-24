@@ -143,6 +143,7 @@ export default function MedicinesPage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Unit Type</label>
                 <select
+                  title='unit'
                   className="w-full h-10 px-3 py-2 border border-input bg-transparent rounded-md text-sm"
                   value={newMedicine.unit}
                   onChange={(e) => setNewMedicine({ ...newMedicine, unit: e.target.value })}

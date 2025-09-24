@@ -40,7 +40,7 @@ export default function PatientDashboard() {
       color: 'bg-purple-500 hover:bg-purple-600'
     },
     {
-      title: 'Consult Doctor',
+      title: 'Book Doctor',
       description: 'Book appointment with doctors',
       icon: Stethoscope,
       href: '/dashboard/patient/consultations',
@@ -133,7 +133,7 @@ export default function PatientDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Consultations</CardTitle>
+            <CardTitle className="text-sm font-medium">Appointments</CardTitle>
             <Stethoscope className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
