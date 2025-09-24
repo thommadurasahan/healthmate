@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b bg-white/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-primary fill-current" />
@@ -162,17 +162,17 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-50 py-12">
+      <footer className="bg-background/80 backdrop-blur-sm border-t border-border py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center space-y-4">
             <div className="flex items-center space-x-2">
               <Heart className="h-6 w-6 text-primary fill-current" />
-              <span className="text-lg font-semibold">HealthMate</span>
+              <span className="text-lg font-semibold text-foreground">HealthMate</span>
             </div>
-            <p className="text-gray-600 text-center">
+            <p className="text-muted-foreground text-center">
               Making healthcare accessible, affordable, and efficient for everyone.
             </p>
-            <div className="flex space-x-6 text-sm text-gray-500">
+            <div className="flex space-x-6 text-sm text-muted-foreground">
               <a href="#" className="hover:text-primary">Privacy Policy</a>
               <a href="#" className="hover:text-primary">Terms of Service</a>
               <a href="#" className="hover:text-primary">Contact Us</a>
