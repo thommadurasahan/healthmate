@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  /* Base theme colors */
   --background: #ffffff;
   --foreground: #171717;
   --card: #ffffff;
@@ -21,6 +22,20 @@
   --input: #e2e8f0;
   --ring: #16a34a;
   --radius: 0.5rem;
+
+  /* Pharmacy-specific theme colors */
+  --pharmacy-primary: #16a34a;
+  --pharmacy-primary-light: #22c55e;
+  --pharmacy-secondary: #f0fdf4;
+  --pharmacy-accent: #dcfce7;
+  --pharmacy-text: #0f172a;
+  --pharmacy-text-light: #64748b;
+  --pharmacy-border: #e2e8f0;
+  --pharmacy-background: #ffffff;
+  --pharmacy-card-bg: #ffffff;
+  --pharmacy-hover: #f0fdf4;
+  --pharmacy-active: #16a34a;
+  --pharmacy-active-text: #ffffff;
 }
 
 @theme inline {
@@ -79,4 +94,48 @@ body {
 
 * {
   border-color: var(--border);
+}
+
+/* Pharmacy section specific styles */
+.pharmacy-section {
+  background-color: var(--pharmacy-background);
+  color: var(--pharmacy-text);
+}
+
+.pharmacy-card {
+  background-color: var(--pharmacy-card-bg);
+  border: 1px solid var(--pharmacy-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.pharmacy-button {
+  background-color: var(--pharmacy-primary);
+  color: var(--pharmacy-active-text);
+  transition: background-color 0.2s;
+}
+
+.pharmacy-button:hover {
+  background-color: var(--pharmacy-primary-light);
+}
+
+.pharmacy-link {
+  color: var(--pharmacy-text);
+}
+
+.pharmacy-link:hover {
+  background-color: var(--pharmacy-hover);
+  color: var(--pharmacy-primary);
+}
+
+.pharmacy-active {
+  background-color: var(--pharmacy-active) !important;
+  color: var(--pharmacy-active-text) !important;
+}
+
+.pharmacy-heading {
+  color: var(--pharmacy-text);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
 }
