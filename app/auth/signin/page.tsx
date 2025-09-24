@@ -115,7 +115,7 @@ export default function SignIn() {
               <div className="text-red-500 text-sm text-center">{error}</div>
             )}
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>

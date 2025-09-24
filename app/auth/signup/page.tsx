@@ -524,7 +524,7 @@ export default function SignUp() {
               <div className="text-red-500 text-sm text-center">{error}</div>
             )}
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
               {isLoading ? 'Creating account...' : 'Create Account'}
             </Button>
           </form>
