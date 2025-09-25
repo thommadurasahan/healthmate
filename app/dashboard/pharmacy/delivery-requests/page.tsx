@@ -57,39 +57,37 @@ export default function DeliveryRequestsPage() {
   };
 
   return (
-    <div className="pharmacy-section p-6 bg-pharmacy-background min-h-screen">
-      <h1 className="pharmacy-heading text-2xl font-semibold text-pharmacy-text mb-6">Create Delivery Request</h1>
-
-      <Card className="pharmacy-card bg-white shadow-md border border-pharmacy-border">
+    <div className="pharmacy-section p-6 min-h-screen bg-gray-900 dark:bg-gray-900">
+      <Card className="rounded-lg text-card-foreground pharmacy-card bg-white dark:bg-gray-800 shadow-lg border border-pharmacy-border dark:border-gray-600">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium mb-2 text-pharmacy-text">Pickup Address</label>
+            <label className="block text-sm font-medium mb-2 text-pharmacy-text dark:text-gray-300">Pickup Address</label>
             <Input
               required
               value={formData.pickupAddress}
               onChange={(e) => setFormData({ ...formData, pickupAddress: e.target.value })}
               placeholder="Enter pickup address"
-              className="w-full bg-pharmacy-secondary border-pharmacy-border focus:border-pharmacy-primary focus:ring-pharmacy-primary"
+              className="w-full bg-pharmacy-secondary dark:bg-gray-700 border-pharmacy-border dark:border-gray-600 focus:border-pharmacy-primary focus:ring-pharmacy-primary dark:text-white dark:placeholder-gray-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-pharmacy-text">Expected Pickup Time</label>
+            <label className="block text-sm font-medium mb-2 text-pharmacy-text dark:text-gray-300">Expected Pickup Time</label>
             <Input
               required
               type="datetime-local"
               value={formData.expectedPickupTime}
               onChange={(e) => setFormData({ ...formData, expectedPickupTime: e.target.value })}
-              className="w-full bg-pharmacy-secondary border-pharmacy-border focus:border-pharmacy-primary focus:ring-pharmacy-primary"
+              className="w-full bg-pharmacy-secondary dark:bg-gray-700 border-pharmacy-border dark:border-gray-600 focus:border-pharmacy-primary focus:ring-pharmacy-primary dark:text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-pharmacy-text">Urgency Level</label>
+            <label className="block text-sm font-medium mb-2 text-pharmacy-text dark:text-gray-300">Urgency Level</label>
             <select
               value={formData.urgencyLevel}
               onChange={(e) => setFormData({ ...formData, urgencyLevel: e.target.value })}
-              className="w-full p-2 border rounded-md bg-pharmacy-secondary border-pharmacy-border focus:border-pharmacy-primary focus:ring-pharmacy-primary focus:outline-none"
+              className="w-full p-2 border rounded-md bg-pharmacy-secondary dark:bg-gray-700 border-pharmacy-border dark:border-gray-600 focus:border-pharmacy-primary focus:ring-pharmacy-primary focus:outline-none dark:text-white"
             >
               {urgencyOptions.map(option => (
                 <option 
@@ -104,12 +102,12 @@ export default function DeliveryRequestsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-pharmacy-text">Delivery Notes</label>
+            <label className="block text-sm font-medium mb-2 text-pharmacy-text dark:text-gray-300">Delivery Notes</label>
             <textarea
               value={formData.deliveryNotes}
               onChange={(e) => setFormData({ ...formData, deliveryNotes: e.target.value })}
               placeholder="Add any special instructions or notes"
-              className="w-full p-2 border rounded-md h-24 bg-pharmacy-secondary border-pharmacy-border focus:border-pharmacy-primary focus:ring-pharmacy-primary focus:outline-none resize-none"
+              className="w-full p-2 border rounded-md h-24 bg-pharmacy-secondary dark:bg-gray-700 border-pharmacy-border dark:border-gray-600 focus:border-pharmacy-primary focus:ring-pharmacy-primary focus:outline-none resize-none dark:text-white dark:placeholder-gray-400"
             />
           </div>
 
@@ -124,10 +122,10 @@ export default function DeliveryRequestsPage() {
       </Card>
 
       <AlertDialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <AlertDialogContent className="bg-pharmacy-background border-pharmacy-border">
+        <AlertDialogContent className="bg-pharmacy-background dark:bg-gray-800 border-pharmacy-border dark:border-gray-700">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-pharmacy-text font-semibold">Delivery Request Submitted</AlertDialogTitle>
-            <AlertDialogDescription className="text-pharmacy-text-light">
+            <AlertDialogTitle className="text-pharmacy-text dark:text-white font-semibold">Delivery Request Submitted</AlertDialogTitle>
+            <AlertDialogDescription className="text-pharmacy-text-light dark:text-gray-300">
               Your delivery request has been successfully submitted. A delivery partner will be assigned shortly.
             </AlertDialogDescription>
           </AlertDialogHeader>
