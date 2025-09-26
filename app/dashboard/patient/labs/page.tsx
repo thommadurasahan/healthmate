@@ -23,10 +23,11 @@ import Link from 'next/link'
 interface LabTest {
   id: string
   name: string
-  description: string
+  description?: string
   price: number
   duration: string
   requirements?: string
+  isActive: boolean
 }
 
 interface Laboratory {
@@ -42,8 +43,17 @@ interface LabBooking {
   id: string
   status: string
   scheduledDate: string
-  laboratory: Laboratory
-  labTest: LabTest
+  laboratory: {
+    name: string
+    address: string
+    phone: string
+  }
+  labTest: {
+    name: string
+    description?: string
+    duration: string
+    requirements?: string
+  }
   totalAmount: number
   reportFilePath?: string
   createdAt: string
