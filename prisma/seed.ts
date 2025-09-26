@@ -480,7 +480,7 @@ async function main() {
   console.log('Pharmacy: wellness@pharmacy.com / pharmacy123')
   console.log('Doctor: dr.smith@healthmate.com / doctor123')
   console.log('Doctor: dr.johnson@healthmate.com / doctor123')
-  console.log('Lab: central@lab.com / lab123')
+  console.log('Lab: quicklab@lab.com / lab123')
   console.log('Delivery: alex.driver@delivery.com / delivery123')
   console.log('Delivery: sam.courier@delivery.com / delivery123')
 }
