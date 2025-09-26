@@ -187,6 +187,27 @@ async function main() {
           }
         }
       }
+    }),
+    prisma.user.upsert({
+      where: { email: 'quicklab@lab.com' },
+      update: {},
+      create: {
+        email: 'quicklab@lab.com',
+        password: labPassword,
+        name: 'QuickLab Manager',
+        role: 'LABORATORY',
+        isApproved: true,
+        laboratory: {
+          create: {
+            name: 'QuickLab Services',
+            address: '456 Diagnostic Ave, Health Plaza',
+            phone: '+1234567899',
+            license: 'LAB002',
+            latitude: 40.7489,
+            longitude: -73.9680
+          }
+        }
+      }
     })
   ])
 
