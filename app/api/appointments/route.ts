@@ -27,9 +27,11 @@ export async function GET(request: NextRequest) {
       where,
       include: {
         patient: {
-          include: {
+          select: {
+            id: true,
+            phone: true,
             user: {
-              select: { name: true, email: true, phone: true }
+              select: { name: true, email: true }
             }
           }
         },
