@@ -87,25 +87,13 @@ export default function PatientLabsPage() {
   const fetchLabBookings = async () => {
     setBookingsLoading(true)
     try {
-      // Mock data - replace with actual API call
-      setLabBookings([
-        {
-          id: 'booking1',
-          status: 'REPORT_READY',
-          scheduledDate: '2024-01-15',
-          laboratory: laboratories[0] || {} as Laboratory,
-          labTest: {
-            id: 'test1',
-            name: 'Complete Blood Count (CBC)',
-            description: 'Comprehensive blood analysis',
-            price: 25.00,
-            duration: '4-6 hours'
-          },
-          totalAmount: 26.25,
-          reportFilePath: '/reports/booking1.pdf',
-          createdAt: '2024-01-14'
-        }
-      ])
+      const response = await fetch('/api/lab-bookings')
+      if (response.ok) {
+        const data = await response.json()
+        setLabBookings(data)
+      } else {
+        console.error('Failed to fetch lab bookings')
+      }
     } catch (error) {
       console.error('Error fetching lab bookings:', error)
     } finally {
