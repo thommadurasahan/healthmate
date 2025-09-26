@@ -426,6 +426,7 @@ async function main() {
         }
       })
     ])
+  console.log('Lab: central@lab.com / lab123')
   }
 
   // Create Doctor Availability
