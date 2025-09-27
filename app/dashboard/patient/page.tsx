@@ -54,25 +54,39 @@ export default function PatientDashboard() {
       setLoading(true)
       
       // Fetch dashboard stats
+      console.log('🔍 Fetching dashboard stats from /api/patient/dashboard-stats...')
       const statsResponse = await fetch('/api/patient/dashboard-stats')
+      console.log('📡 Dashboard stats response status:', statsResponse.status)
+      
       if (statsResponse.ok) {
         const statsData = await statsResponse.json()
+        console.log('✅ Dashboard stats fetched successfully:', statsData)
         setStats(statsData)
+      } else {
+        const errorData = await statsResponse.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('❌ Failed to fetch dashboard stats:', statsResponse.status, errorData)
       }
 
       // Fetch recent activity
+      console.log('🔍 Fetching recent activity from /api/patient/recent-activity...')
       const activityResponse = await fetch('/api/patient/recent-activity')
+      console.log('📡 Recent activity response status:', activityResponse.status)
+      
       if (activityResponse.ok) {
         const activityData = await activityResponse.json()
+        console.log('✅ Recent activity fetched successfully:', activityData)
         const formattedActivity = activityData.map((item: any) => ({
           ...item,
           icon: getActivityIcon(item.type, item.status),
           href: getActivityHref(item.type, item.id)
         }))
         setRecentActivity(formattedActivity)
+      } else {
+        const errorData = await activityResponse.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('❌ Failed to fetch recent activity:', activityResponse.status, errorData)
       }
     } catch (error) {
-      console.error('Failed to fetch dashboard data:', error)
+      console.error('❌ Failed to fetch dashboard data:', error)
       // Fallback to sample data if API fails
       setStats({
         totalOrders: 0,

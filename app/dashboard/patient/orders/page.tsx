@@ -19,24 +19,36 @@ import {
 
 interface Order {
   id: string
-  prescriptionId: string
+  orderType: string
+  prescriptionId?: string
   pharmacy: {
     name: string
     address: string
     phone: string
   }
-  items: {
-    name: string
+  orderItems: {
+    id: string
     quantity: number
-    price: number
+    unitPrice: number
+    totalPrice: number
+    medicine: {
+      name: string
+      unit: string
+      price: number
+    }
   }[]
   totalAmount: number
   commissionAmount: number
   netAmount: number
   status: string
+  deliveryAddress: string
+  specialInstructions?: string
   createdAt: string
   updatedAt: string
-  deliveredAt?: string
+  patient?: any
+  prescription?: any
+  delivery?: any
+  transactions?: any[]
 }
 
 export default function PatientOrdersPage() {
@@ -53,16 +65,23 @@ export default function PatientOrdersPage() {
   const fetchOrders = async () => {
     try {
       setLoading(true)
+      console.log('🔍 Fetching orders from /api/orders...')
+      
       const response = await fetch('/api/orders')
+      console.log('📡 Response status:', response.status)
+      
       if (response.ok) {
         const data = await response.json()
+        console.log('✅ Orders fetched successfully:', data)
+        console.log('📊 Number of orders:', data.length)
         setOrders(data)
       } else {
-        console.error('Failed to fetch orders')
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('❌ Failed to fetch orders:', response.status, errorData)
         setOrders([])
       }
     } catch (error) {
-      console.error('Error fetching orders:', error)
+      console.error('❌ Error fetching orders:', error)
       setOrders([])
     } finally {
       setLoading(false)
@@ -197,8 +216,8 @@ export default function PatientOrdersPage() {
                     <div>
                       <CardTitle className="text-lg">Order #{order.id}</CardTitle>
                       <CardDescription>
-                        Placed on {order.createdAt}
-                        {order.deliveredAt && ` • Delivered on ${order.deliveredAt}`}
+                        Placed on {new Date(order.createdAt).toLocaleDateString()}
+                        {order.status === 'DELIVERED' && ` • Delivered`}
                       </CardDescription>
                     </div>
                   </div>
@@ -231,15 +250,15 @@ export default function PatientOrdersPage() {
 
                 {/* Order Items */}
                 <div>
-                  <h4 className="font-medium mb-2">Items ({order.items.length})</h4>
+                  <h4 className="font-medium mb-2">Items ({order.orderItems.length})</h4>
                   <div className="space-y-2">
-                    {order.items.map((item, index) => (
+                    {order.orderItems.map((item, index) => (
                       <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
                         <div>
-                          <p className="font-medium text-foreground">{item.name}</p>
-                          <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
+                          <p className="font-medium text-foreground">{item.medicine.name}</p>
+                          <p className="text-sm text-muted-foreground">Quantity: {item.quantity} {item.medicine.unit}</p>
                         </div>
-                        <p className="font-medium">{formatCurrency(item.price * item.quantity)}</p>
+                        <p className="font-medium">{formatCurrency(item.totalPrice)}</p>
                       </div>
                     ))}
                   </div>

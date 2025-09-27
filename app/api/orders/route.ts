@@ -19,13 +19,17 @@ export async function GET(request: NextRequest) {
 
     // Filter orders based on user role
     if (session.user.role === 'PATIENT') {
+      console.log('🔍 Looking for patient with userId:', session.user.id)
       const patient = await prisma.patient.findUnique({
         where: { userId: session.user.id }
       })
+      console.log('👤 Patient found:', patient)
       if (!patient) {
+        console.error('❌ Patient profile not found for userId:', session.user.id)
         return NextResponse.json({ error: 'Patient profile not found' }, { status: 404 })
       }
       where.patientId = patient.id
+      console.log('🎯 Filtering orders by patientId:', patient.id)
     } else if (session.user.role === 'PHARMACY') {
       const pharmacy = await prisma.pharmacy.findUnique({
         where: { userId: session.user.id }
@@ -77,23 +81,18 @@ export async function GET(request: NextRequest) {
         prescription: {
           select: { fileName: true, status: true }
         },
-        delivery: {
-          include: {
-            deliveryPartner: {
-              include: {
-                user: {
-                  select: { name: true, phone: true }
-                }
-              }
-            }
-          }
-        },
+        delivery: true,
         transactions: true
       },
       orderBy: {
         createdAt: 'desc'
       }
     })
+
+    console.log('📊 Orders found:', orders.length)
+    if (orders.length > 0) {
+      console.log('🔍 Sample order:', JSON.stringify(orders[0], null, 2))
+    }
 
     return NextResponse.json(orders)
   } catch (error) {
