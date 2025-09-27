@@ -173,31 +173,32 @@ export default function PatientDashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 text-white p-6 rounded-lg">
-        <h1 className="text-2xl font-bold mb-2">
-          Welcome back, {session?.user?.name}!
-        </h1>
-        <p className="text-primary-foreground/80">
-          Manage your health needs all in one place. Upload prescriptions, order medicines, 
-          and book appointments with ease.
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <div className="space-y-6">
+        {/* Welcome Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 text-white p-6 rounded-lg shadow-lg">
+          <h1 className="text-2xl font-bold mb-2">
+            Welcome back, {session?.user?.name}!
+          </h1>
+          <p className="text-blue-100">
+            Manage your health needs all in one place. Upload prescriptions, order medicines, 
+            and book appointments with ease.
+          </p>
+        </div>
 
       {/* Medicine Ordering Section */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Medicine Ordering</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Medicine Ordering</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {quickActions.slice(0, 2).map((action) => (
             <Link key={action.title} href={action.href}>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full border-2 hover:border-primary/50">
+              <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-shadow cursor-pointer h-full border-2 hover:border-blue-500/50 dark:hover:border-blue-400/50">
                 <CardHeader className="text-center p-6">
                   <div className={`inline-flex p-4 rounded-full text-white mb-3 ${action.color}`}>
                     <action.icon className="h-8 w-8" />
                   </div>
-                  <CardTitle className="text-xl mb-2">{action.title}</CardTitle>
-                  <CardDescription className="text-base">
+                  <CardTitle className="text-xl mb-2 text-gray-900 dark:text-white">{action.title}</CardTitle>
+                  <CardDescription className="text-base text-gray-600 dark:text-gray-300">
                     {action.description}
                   </CardDescription>
                 </CardHeader>
@@ -209,17 +210,17 @@ export default function PatientDashboard() {
 
       {/* Other Services */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Other Services</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Other Services</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {quickActions.slice(2).map((action) => (
             <Link key={action.title} href={action.href}>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-shadow cursor-pointer h-full">
                 <CardHeader className="text-center">
                   <div className={`inline-flex p-3 rounded-full text-white mb-2 ${action.color}`}>
                     <action.icon className="h-6 w-6" />
                   </div>
-                  <CardTitle className="text-lg">{action.title}</CardTitle>
-                  <CardDescription className="text-sm">
+                  <CardTitle className="text-lg text-gray-900 dark:text-white">{action.title}</CardTitle>
+                  <CardDescription className="text-sm text-gray-600 dark:text-gray-300">
                     {action.description}
                   </CardDescription>
                 </CardHeader>
@@ -232,14 +233,14 @@ export default function PatientDashboard() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Link href="/dashboard/patient/orders">
-          <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer hover:border-primary/50">
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 cursor-pointer hover:border-blue-500/50 dark:hover:border-blue-400/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-              <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Total Orders</CardTitle>
+              <ShoppingBag className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.totalOrders || 0}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats?.totalOrders || 0}</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 {formatGrowth(stats?.monthlyOrderGrowth || 0)}
               </p>
             </CardContent>
@@ -247,14 +248,14 @@ export default function PatientDashboard() {
         </Link>
 
         <Link href="/dashboard/patient/labs">
-          <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer hover:border-primary/50">
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 cursor-pointer hover:border-blue-500/50 dark:hover:border-blue-400/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Lab Tests</CardTitle>
-              <TestTube className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Lab Tests</CardTitle>
+              <TestTube className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.totalLabTests || 0}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats?.totalLabTests || 0}</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 {formatGrowth(stats?.monthlyLabGrowth || 0)}
               </p>
             </CardContent>
@@ -262,14 +263,14 @@ export default function PatientDashboard() {
         </Link>
 
         <Link href="/dashboard/patient/consultations">
-          <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer hover:border-primary/50">
+          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 cursor-pointer hover:border-blue-500/50 dark:hover:border-blue-400/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Appointments</CardTitle>
-              <Stethoscope className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Appointments</CardTitle>
+              <Stethoscope className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.totalAppointments || 0}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats?.totalAppointments || 0}</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 {formatGrowth(stats?.monthlyAppointmentGrowth || 0)}
               </p>
             </CardContent>
@@ -278,13 +279,13 @@ export default function PatientDashboard() {
       </div>
 
       {/* Recent Activity */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Your latest healthcare activities</CardDescription>
+            <CardTitle className="text-gray-900 dark:text-white">Recent Activity</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-300">Your latest healthcare activities</CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchDashboardData}>
+          <Button variant="outline" size="sm" onClick={fetchDashboardData} className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
             Refresh
           </Button>
         </CardHeader>
@@ -325,10 +326,10 @@ export default function PatientDashboard() {
                         <activity.icon className="h-4 w-4" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
                           {activity.message}
                         </p>
-                        <p className="text-sm text-muted-foreground">{activity.time}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{activity.time}</p>
                       </div>
                     </div>
                   )}
@@ -337,15 +338,16 @@ export default function PatientDashboard() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">No recent activity</p>
-              <p className="text-sm text-muted-foreground mt-1">
+              <FileText className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-400">No recent activity</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
                 Start by uploading a prescription or booking an appointment
               </p>
             </div>
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }

@@ -109,40 +109,40 @@ export default function DeliveryDashboard() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'PENDING':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
       case 'ASSIGNED':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
       case 'PICKED_UP':
-        return 'bg-purple-100 text-purple-800'
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
       case 'IN_TRANSIT':
-        return 'bg-orange-100 text-orange-800'
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
       case 'DELIVERED':
-        return 'bg-green-100 text-green-800'
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
     }
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 dark:border-orange-400"></div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 text-white p-6 rounded-lg">
+      <div className="bg-gradient-to-r from-orange-600 to-yellow-600 text-white p-6 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-2">
           Welcome, {session?.user?.name}!
         </h1>
-        <p className="text-primary-foreground/80">
+        <p className="text-white/90">
           Manage your delivery requests and earn money by delivering medicines to patients.
         </p>
         {session?.user?.deliveryPartner?.isApproved === false && (
-          <div className="mt-4 bg-yellow-500/20 border border-yellow-300 text-yellow-900 p-3 rounded-md">
+          <div className="mt-4 bg-yellow-500/20 border border-yellow-300 text-yellow-100 p-3 rounded-md">
             <AlertTriangle className="h-5 w-5 inline mr-2" />
             Your account is pending admin approval. You'll be able to accept deliveries once approved.
           </div>
@@ -151,60 +151,60 @@ export default function DeliveryDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Available Deliveries</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Available Deliveries</CardTitle>
+            <Package className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{availableDeliveries.length}</div>
-            <p className="text-xs text-muted-foreground">Ready to accept</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{availableDeliveries.length}</div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Ready to accept</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Deliveries</CardTitle>
-            <MapPin className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">My Deliveries</CardTitle>
+            <MapPin className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{myDeliveries.length}</div>
-            <p className="text-xs text-muted-foreground">In progress</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{myDeliveries.length}</div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">In progress</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed Today</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Completed Today</CardTitle>
+            <CheckCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
               {myDeliveries.filter(d => d.status === 'DELIVERED').length}
             </div>
-            <p className="text-xs text-muted-foreground">Deliveries completed</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Deliveries completed</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Estimated Earnings</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Estimated Earnings</CardTitle>
+            <DollarSign className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
               ${myDeliveries.reduce((sum, d) => sum + d.deliveryFee, 0).toFixed(2)}
             </div>
-            <p className="text-xs text-muted-foreground">Today's earnings</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Today's earnings</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Available Deliveries */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
         <CardHeader>
-          <CardTitle>Available Delivery Requests</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-gray-900 dark:text-white">Available Delivery Requests</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-300">
             First-come-first-serve delivery requests from pharmacies
           </CardDescription>
         </CardHeader>
@@ -213,7 +213,7 @@ export default function DeliveryDashboard() {
             {availableDeliveries.map((delivery) => (
               <div
                 key={delivery.id}
-                className="border rounded-lg p-4 hover:bg-gray-50"
+                className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
@@ -228,18 +228,18 @@ export default function DeliveryDashboard() {
                     
                     <div className="grid md:grid-cols-2 gap-4 mb-3">
                       <div>
-                        <h4 className="font-medium text-gray-900">Pickup</h4>
-                        <p className="text-sm text-gray-600">{delivery.order.pharmacy.name}</p>
-                        <p className="text-sm text-gray-500">{delivery.pickupAddress}</p>
+                        <h4 className="font-medium text-gray-900 dark:text-white">Pickup</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{delivery.order.pharmacy.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{delivery.pickupAddress}</p>
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">Delivery</h4>
-                        <p className="text-sm text-gray-600">{delivery.order.patient.user.name}</p>
-                        <p className="text-sm text-gray-500">{delivery.deliveryAddress}</p>
+                        <h4 className="font-medium text-gray-900 dark:text-white">Delivery</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{delivery.order.patient.user.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{delivery.deliveryAddress}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
                       <span>Items: {delivery.order.orderItems.length}</span>
                       <span>Value: ${delivery.order.totalAmount}</span>
                       <span>Fee: ${delivery.deliveryFee}</span>
@@ -248,7 +248,7 @@ export default function DeliveryDashboard() {
                   
                   <Button 
                     onClick={() => acceptDelivery(delivery.id)}
-                    className="ml-4"
+                    className="ml-4 bg-orange-600 hover:bg-orange-700 text-white dark:bg-orange-700 dark:hover:bg-orange-800"
                   >
                     Accept Delivery
                   </Button>
@@ -257,7 +257,7 @@ export default function DeliveryDashboard() {
             ))}
 
             {availableDeliveries.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>No delivery requests available at the moment</p>
               </div>
@@ -267,17 +267,17 @@ export default function DeliveryDashboard() {
       </Card>
 
       {/* My Deliveries */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
         <CardHeader>
-          <CardTitle>My Assigned Deliveries</CardTitle>
-          <CardDescription>Track and update your delivery status</CardDescription>
+          <CardTitle className="text-gray-900 dark:text-white">My Assigned Deliveries</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-300">Track and update your delivery status</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {myDeliveries.map((delivery) => (
               <div
                 key={delivery.id}
-                className="border rounded-lg p-4"
+                className="border border-gray-200 dark:border-gray-600 rounded-lg p-4"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
@@ -292,26 +292,26 @@ export default function DeliveryDashboard() {
                     
                     <div className="grid md:grid-cols-2 gap-4 mb-3">
                       <div>
-                        <h4 className="font-medium text-gray-900">Pickup</h4>
-                        <p className="text-sm text-gray-600">{delivery.order.pharmacy.name}</p>
-                        <p className="text-sm text-gray-500">{delivery.pickupAddress}</p>
-                        <p className="text-sm text-gray-500">{delivery.order.pharmacy.phone}</p>
+                        <h4 className="font-medium text-gray-900 dark:text-white">Pickup</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{delivery.order.pharmacy.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{delivery.pickupAddress}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{delivery.order.pharmacy.phone}</p>
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">Delivery</h4>
-                        <p className="text-sm text-gray-600">{delivery.order.patient.user.name}</p>
-                        <p className="text-sm text-gray-500">{delivery.deliveryAddress}</p>
-                        <p className="text-sm text-gray-500">{delivery.order.patient.user.phone}</p>
+                        <h4 className="font-medium text-gray-900 dark:text-white">Delivery</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{delivery.order.patient.user.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{delivery.deliveryAddress}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{delivery.order.patient.user.phone}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3">
                       <span>Items: {delivery.order.orderItems.length}</span>
                       <span>Value: ${delivery.order.totalAmount}</span>
                       <span>Fee: ${delivery.deliveryFee}</span>
                     </div>
 
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
                       Medicines: {delivery.order.orderItems.map(item => 
                         `${item.medicine.name} (${item.quantity})`
                       ).join(', ')}
@@ -350,7 +350,7 @@ export default function DeliveryDashboard() {
             ))}
 
             {myDeliveries.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 <MapPin className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>No assigned deliveries</p>
               </div>

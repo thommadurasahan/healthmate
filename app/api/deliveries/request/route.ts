@@ -5,9 +5,11 @@ import { prisma } from '@/lib/db';
 import { DeliveryStatus, NotificationType, UserRole } from '@prisma/client';
 
 interface DeliveryRequestBody {
+  orderId?: string;
   pickupAddress: string;
+  deliveryAddress: string;
   deliveryNotes: string;
-  urgencyLevel: 'normal' | 'urgent' | 'emergency';
+  urgencyLevel: 'NORMAL' | 'URGENT' | 'EMERGENCY';
   expectedPickupTime: string;
 }
 
@@ -29,7 +31,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { pickupAddress, deliveryNotes, urgencyLevel, expectedPickupTime }: DeliveryRequestBody = await req.json();
+    const { orderId, pickupAddress, deliveryAddress, deliveryNotes, urgencyLevel, expectedPickupTime }: DeliveryRequestBody = await req.json();
+
+    // Validate required fields
+    if (!pickupAddress || !deliveryAddress || !expectedPickupTime) {
+      return NextResponse.json(
+        { error: 'Missing required fields: pickupAddress, deliveryAddress, expectedPickupTime' },
+        { status: 400 }
+      );
+    }
 
     // Get the pharmacy profile for the current user
     const pharmacy = await prisma.pharmacy.findUnique({
@@ -43,28 +53,74 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create the delivery
+    // If orderId is provided, connect to existing order, otherwise create a new placeholder order
+    let orderData;
+    if (orderId) {
+      // Verify the order exists and belongs to this pharmacy
+      const existingOrder = await prisma.order.findFirst({
+        where: {
+          id: orderId,
+          pharmacyId: pharmacy.id
+        }
+      });
+      
+      if (!existingOrder) {
+        return NextResponse.json(
+          { error: 'Order not found or does not belong to this pharmacy' },
+          { status: 404 }
+        );
+      }
+      
+      orderData = { orderId };
+    } else {
+      // Create a new order for this delivery request
+      const newOrder = await prisma.order.create({
+        data: {
+          userId: session.user.id,
+          patientId: session.user.id, // Temporary - will be updated when actual patient orders
+          pharmacyId: pharmacy.id,
+          orderType: 'DIRECT',
+          status: 'PENDING',
+          totalAmount: 0,
+          commissionRate: 0.05,
+          commissionAmount: 0,
+          netAmount: 0,
+          deliveryAddress,
+          specialInstructions: deliveryNotes || ''
+        }
+      });
+      
+      orderData = { orderId: newOrder.id };
+    }
+
+    // Create the delivery request
     const delivery = await prisma.delivery.create({
       data: {
+        ...orderData,
         pickupAddress,
-        deliveryAddress: '', // This will be updated when an order is created
+        deliveryAddress,
         status: DeliveryStatus.PENDING,
         estimatedTime: new Date(expectedPickupTime),
+        deliveryFee: 5.0 // Standard delivery fee
+      },
+      include: {
         order: {
-          create: {
-            userId: session.user.id,
-            patientId: '', // Will be set when order is processed
-            pharmacyId: pharmacy.id,
-            status: 'PENDING',
-            totalAmount: 0, // Will be calculated when medicines are added
-            commissionRate: 0.05,
-            commissionAmount: 0, // Will be calculated
-            netAmount: 0, // Will be calculated
-            deliveryAddress: '', // Will be set when order is processed
-            specialInstructions: deliveryNotes,
+          include: {
+            pharmacy: {
+              select: {
+                name: true,
+                phone: true
+              }
+            }
+          }
+        },
+        deliveryPartner: {
+          select: {
+            name: true,
+            phone: true
           }
         }
-      },
+      }
     });
 
     // Create a notification for available delivery partners
@@ -120,12 +176,49 @@ export async function GET(req: NextRequest) {
         createdAt: 'desc',
       },
       include: {
-        deliveryPartner: true,
-        order: true
+        deliveryPartner: {
+          select: {
+            name: true,
+            phone: true
+          }
+        },
+        order: {
+          include: {
+            patient: {
+              include: {
+                user: {
+                  select: {
+                    name: true,
+                    phone: true
+                  }
+                }
+              }
+            }
+          }
+        }
       },
     });
 
-    return NextResponse.json(deliveries);
+    // Transform the data to match frontend expectations
+    const transformedDeliveries = deliveries.map(delivery => ({
+      id: delivery.id,
+      orderId: delivery.orderId,
+      pickupAddress: delivery.pickupAddress,
+      deliveryAddress: delivery.deliveryAddress,
+      status: delivery.status,
+      urgencyLevel: 'NORMAL', // Default since not in schema
+      expectedPickupTime: delivery.estimatedTime?.toISOString() || '',
+      deliveryNotes: delivery.order.specialInstructions || '',
+      createdAt: delivery.createdAt.toISOString(),
+      deliveryPartner: delivery.deliveryPartner,
+      order: {
+        orderType: delivery.order.orderType,
+        totalAmount: delivery.order.totalAmount,
+        patient: delivery.order.patient
+      }
+    }));
+
+    return NextResponse.json(transformedDeliveries);
   } catch (error) {
     console.error('Error fetching delivery requests:', error);
     return NextResponse.json(

@@ -125,38 +125,39 @@ export default function DoctorDashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 text-white p-6 rounded-lg">
-        <h1 className="text-2xl font-bold mb-2">
-          Welcome, Dr. {session?.user?.name}!
-        </h1>
-        <p className="text-primary-foreground/80">
-          Manage your appointments, conduct video consultations, and provide quality healthcare services.
-        </p>
-        <div className="mt-2 text-sm text-primary-foreground/90">
-          Specialization: {session?.user?.doctor?.specialization}
-        </div>
-        {session?.user?.doctor?.isApproved === false && (
-          <div className="mt-4 bg-yellow-500/20 border border-yellow-300 text-yellow-900 p-3 rounded-md">
-            <AlertTriangle className="h-5 w-5 inline mr-2" />
-            Your profile is pending admin approval. You'll be able to receive appointments once approved.
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 text-white p-6 rounded-lg shadow-lg">
+          <h1 className="text-2xl font-bold mb-2">
+            Welcome, Dr. {session?.user?.name}!
+          </h1>
+          <p className="text-red-100">
+            Manage your appointments, conduct video consultations, and provide quality healthcare services.
+          </p>
+          <div className="mt-2 text-sm text-red-100">
+            Specialization: {session?.user?.doctor?.specialization}
           </div>
-        )}
-      </div>
+          {session?.user?.doctor?.isApproved === false && (
+            <div className="mt-4 bg-yellow-500/20 border border-yellow-300 text-yellow-900 dark:text-yellow-200 p-3 rounded-md">
+              <AlertTriangle className="h-5 w-5 inline mr-2" />
+              Your profile is pending admin approval. You'll be able to receive appointments once approved.
+            </div>
+          )}
+        </div>
 
       {/* Quick Actions */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link href="/dashboard/doctor/availability">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-shadow cursor-pointer h-full">
               <CardHeader className="text-center">
                 <div className="inline-flex p-3 rounded-full text-white mb-2 bg-blue-500 hover:bg-blue-600">
                   <Calendar className="h-6 w-6" />
                 </div>
-                <CardTitle className="text-lg">Set Availability</CardTitle>
-                <CardDescription className="text-sm">
+                <CardTitle className="text-lg text-gray-900 dark:text-white">Set Availability</CardTitle>
+                <CardDescription className="text-sm text-gray-600 dark:text-gray-300">
                   Manage your schedule and available time slots
                 </CardDescription>
               </CardHeader>
@@ -164,13 +165,13 @@ export default function DoctorDashboard() {
           </Link>
 
           <Link href="/dashboard/doctor/appointments">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-shadow cursor-pointer h-full">
               <CardHeader className="text-center">
                 <div className="inline-flex p-3 rounded-full text-white mb-2 bg-green-500 hover:bg-green-600">
                   <Stethoscope className="h-6 w-6" />
                 </div>
-                <CardTitle className="text-lg">View Appointments</CardTitle>
-                <CardDescription className="text-sm">
+                <CardTitle className="text-lg text-gray-900 dark:text-white">View Appointments</CardTitle>
+                <CardDescription className="text-sm text-gray-600 dark:text-gray-300">
                   See all your scheduled appointments
                 </CardDescription>
               </CardHeader>
@@ -178,13 +179,13 @@ export default function DoctorDashboard() {
           </Link>
 
           <Link href="/dashboard/doctor/consultations">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-xl transition-shadow cursor-pointer h-full">
               <CardHeader className="text-center">
                 <div className="inline-flex p-3 rounded-full text-white mb-2 bg-purple-500 hover:bg-purple-600">
                   <Video className="h-6 w-6" />
                 </div>
-                <CardTitle className="text-lg">Video Consultations</CardTitle>
-                <CardDescription className="text-sm">
+                <CardTitle className="text-lg text-gray-900 dark:text-white">Video Consultations</CardTitle>
+                <CardDescription className="text-sm text-gray-600 dark:text-gray-300">
                   Conduct online video consultations
                 </CardDescription>
               </CardHeader>
@@ -195,60 +196,60 @@ export default function DoctorDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today's Appointments</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Today's Appointments</CardTitle>
+            <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{todayAppointments.length}</div>
-            <p className="text-xs text-muted-foreground">Scheduled for today</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{todayAppointments.length}</div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Scheduled for today</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Patients</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Total Patients</CardTitle>
+            <Users className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{appointments.length}</div>
-            <p className="text-xs text-muted-foreground">All time consultations</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{appointments.length}</div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">All time consultations</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
               ${appointments.reduce((sum, appointment) => sum + appointment.consultationFee, 0).toFixed(2)}
             </div>
-            <p className="text-xs text-muted-foreground">Total earnings</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Total earnings</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Consultation Fee</CardTitle>
-            <Stethoscope className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">Consultation Fee</CardTitle>
+            <Stethoscope className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
               ${session?.user?.doctor?.consultationFee}
             </div>
-            <p className="text-xs text-muted-foreground">Per consultation</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Per consultation</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Today's Appointments */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
         <CardHeader>
-          <CardTitle>Today's Appointments</CardTitle>
-          <CardDescription>Your scheduled consultations for today</CardDescription>
+          <CardTitle className="text-gray-900 dark:text-white">Today's Appointments</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-300">Your scheduled consultations for today</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -335,15 +336,15 @@ export default function DoctorDashboard() {
       </Card>
 
       {/* Upcoming Appointments */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Upcoming Appointments</CardTitle>
-            <CardDescription>Your scheduled consultations</CardDescription>
+            <CardTitle className="text-gray-900 dark:text-white">Upcoming Appointments</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-300">Your scheduled consultations</CardDescription>
           </div>
-          <Button asChild>
-            <Link href="/dashboard/doctor/appointments">View All</Link>
-          </Button>
+          <Link href="/dashboard/doctor/appointments">
+            <Button className="bg-red-600 hover:bg-red-700 text-white">View All</Button>
+          </Link>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -389,6 +390,7 @@ export default function DoctorDashboard() {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }

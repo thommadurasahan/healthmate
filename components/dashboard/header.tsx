@@ -8,8 +8,18 @@ import Link from 'next/link'
 export function DashboardHeader() {
   const { data: session } = useSession()
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/' })
+  const handleSignOut = async () => {
+    try {
+      console.log('Initiating sign out...')
+      await signOut({ 
+        callbackUrl: '/',
+        redirect: true 
+      })
+    } catch (error) {
+      console.error('Sign out error:', error)
+      // Fallback redirect to home page
+      window.location.href = '/'
+    }
   }
 
   const getRoleColor = (role: string) => {

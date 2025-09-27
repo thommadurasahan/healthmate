@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
             patient: {
               include: {
                 user: {
-                  select: { name: true }
+                  select: { name: true, phone: true }
                 }
               }
             },
@@ -63,10 +63,9 @@ export async function GET(request: NextRequest) {
           }
         },
         deliveryPartner: {
-          include: {
-            user: {
-              select: { name: true }
-            }
+          select: {
+            name: true,
+            phone: true
           }
         }
       },
@@ -74,6 +73,29 @@ export async function GET(request: NextRequest) {
         createdAt: 'desc'
       }
     })
+
+    // Transform data for pharmacy frontend
+    if (session.user.role === 'PHARMACY') {
+      const transformedDeliveries = deliveries.map(delivery => ({
+        id: delivery.id,
+        orderId: delivery.orderId,
+        pickupAddress: delivery.pickupAddress,
+        deliveryAddress: delivery.deliveryAddress,
+        status: delivery.status,
+        urgencyLevel: 'NORMAL', // Default since not in schema
+        expectedPickupTime: delivery.estimatedTime?.toISOString() || '',
+        deliveryNotes: delivery.order.specialInstructions || '',
+        createdAt: delivery.createdAt.toISOString(),
+        deliveryPartner: delivery.deliveryPartner,
+        order: {
+          orderType: delivery.order.orderType,
+          totalAmount: delivery.order.totalAmount,
+          patient: delivery.order.patient
+        }
+      }));
+      
+      return NextResponse.json(transformedDeliveries);
+    }
 
     return NextResponse.json(deliveries)
   } catch (error) {
