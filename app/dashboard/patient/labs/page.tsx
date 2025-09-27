@@ -23,10 +23,11 @@ import Link from 'next/link'
 interface LabTest {
   id: string
   name: string
-  description: string
+  description?: string
   price: number
   duration: string
   requirements?: string
+  isActive: boolean
 }
 
 interface Laboratory {
@@ -42,8 +43,17 @@ interface LabBooking {
   id: string
   status: string
   scheduledDate: string
-  laboratory: Laboratory
-  labTest: LabTest
+  laboratory: {
+    name: string
+    address: string
+    phone: string
+  }
+  labTest: {
+    name: string
+    description?: string
+    duration: string
+    requirements?: string
+  }
   totalAmount: number
   reportFilePath?: string
   createdAt: string
@@ -70,51 +80,13 @@ export default function PatientLabsPage() {
   const fetchLaboratories = async () => {
     setLaboratoriesLoading(true)
     try {
-      // Mock data - replace with actual API call
-      setLaboratories([
-        {
-          id: 'lab1',
-          name: 'DiagnosticCenter Plus',
-          address: '123 Health St, Medical District',
-          phone: '+1-555-0123',
-          rating: 4.8,
-          labTests: [
-            {
-              id: 'test1',
-              name: 'Complete Blood Count (CBC)',
-              description: 'Comprehensive blood analysis',
-              price: 25.00,
-              duration: '4-6 hours',
-              requirements: 'No fasting required'
-            },
-            {
-              id: 'test2',
-              name: 'Lipid Profile',
-              description: 'Cholesterol and triglyceride levels',
-              price: 35.00,
-              duration: '6-8 hours',
-              requirements: '12-hour fasting required'
-            }
-          ]
-        },
-        {
-          id: 'lab2',
-          name: 'QuickLab Services',
-          address: '456 Diagnostic Ave, Health Plaza',
-          phone: '+1-555-0124',
-          rating: 4.6,
-          labTests: [
-            {
-              id: 'test3',
-              name: 'Thyroid Function Test',
-              description: 'TSH, T3, and T4 levels',
-              price: 45.00,
-              duration: '24 hours',
-              requirements: 'Morning sample preferred'
-            }
-          ]
-        }
-      ])
+      const response = await fetch('/api/laboratories')
+      if (response.ok) {
+        const data = await response.json()
+        setLaboratories(data)
+      } else {
+        console.error('Failed to fetch laboratories')
+      }
     } catch (error) {
       console.error('Error fetching laboratories:', error)
     } finally {
@@ -125,25 +97,13 @@ export default function PatientLabsPage() {
   const fetchLabBookings = async () => {
     setBookingsLoading(true)
     try {
-      // Mock data - replace with actual API call
-      setLabBookings([
-        {
-          id: 'booking1',
-          status: 'REPORT_READY',
-          scheduledDate: '2024-01-15',
-          laboratory: laboratories[0] || {} as Laboratory,
-          labTest: {
-            id: 'test1',
-            name: 'Complete Blood Count (CBC)',
-            description: 'Comprehensive blood analysis',
-            price: 25.00,
-            duration: '4-6 hours'
-          },
-          totalAmount: 26.25,
-          reportFilePath: '/reports/booking1.pdf',
-          createdAt: '2024-01-14'
-        }
-      ])
+      const response = await fetch('/api/lab-bookings')
+      if (response.ok) {
+        const data = await response.json()
+        setLabBookings(data)
+      } else {
+        console.error('Failed to fetch lab bookings')
+      }
     } catch (error) {
       console.error('Error fetching lab bookings:', error)
     } finally {

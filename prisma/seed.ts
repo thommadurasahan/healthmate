@@ -187,6 +187,27 @@ async function main() {
           }
         }
       }
+    }),
+    prisma.user.upsert({
+      where: { email: 'quicklab@lab.com' },
+      update: {},
+      create: {
+        email: 'quicklab@lab.com',
+        password: labPassword,
+        name: 'QuickLab Manager',
+        role: 'LABORATORY',
+        isApproved: true,
+        laboratory: {
+          create: {
+            name: 'QuickLab Services',
+            address: '456 Diagnostic Ave, Health Plaza',
+            phone: '+1234567899',
+            license: 'LAB002',
+            latitude: 40.7489,
+            longitude: -73.9680
+          }
+        }
+      }
     })
   ])
 
@@ -328,6 +349,10 @@ async function main() {
     where: { name: 'Central Diagnostics Lab' }
   })
 
+  const quickLab = await prisma.laboratory.findFirst({
+    where: { name: 'QuickLab Services' }
+  })
+
   if (centralLab) {
     await Promise.all([
       prisma.labTest.upsert({
@@ -370,6 +395,38 @@ async function main() {
         }
       })
     ])
+  }
+
+  if (quickLab) {
+    await Promise.all([
+      prisma.labTest.upsert({
+        where: { id: 'test-004' },
+        update: {},
+        create: {
+          id: 'test-004',
+          laboratoryId: quickLab.id,
+          name: 'Thyroid Function Test',
+          description: 'TSH, T3, and T4 levels',
+          price: 55.00,
+          duration: '24 hours',
+          requirements: 'Morning sample preferred'
+        }
+      }),
+      prisma.labTest.upsert({
+        where: { id: 'test-005' },
+        update: {},
+        create: {
+          id: 'test-005',
+          laboratoryId: quickLab.id,
+          name: 'Liver Function Test',
+          description: 'Complete liver enzyme analysis',
+          price: 40.00,
+          duration: '12 hours',
+          requirements: '8 hours fasting required'
+        }
+      })
+    ])
+  console.log('Lab: central@lab.com / lab123')
   }
 
   // Create Doctor Availability
@@ -424,7 +481,7 @@ async function main() {
   console.log('Pharmacy: wellness@pharmacy.com / pharmacy123')
   console.log('Doctor: dr.smith@healthmate.com / doctor123')
   console.log('Doctor: dr.johnson@healthmate.com / doctor123')
-  console.log('Lab: central@lab.com / lab123')
+  console.log('Lab: quicklab@lab.com / lab123')
   console.log('Delivery: alex.driver@delivery.com / delivery123')
   console.log('Delivery: sam.courier@delivery.com / delivery123')
 }

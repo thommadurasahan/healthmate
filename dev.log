@@ -1,192 +1,73 @@
 yarn run v1.22.22
 $ next dev --turbopack
- ⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
+ ⚠ Invalid next.config.ts options detected: 
+ ⚠     Unrecognized key(s) in object: 'serverComponentsExternalPackages' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ⚠ `experimental.serverComponentsExternalPackages` has been moved to `serverExternalPackages`. Please update your next.config.ts file accordingly.
    ▲ Next.js 15.5.3 (Turbopack)
-   - Local:        http://localhost:3001
-   - Network:      http://10.227.0.46:3001
+   - Local:        http://localhost:3000
+   - Network:      http://10.227.5.153:3000
    - Environments: .env.local
+   - Experiments (use with caution):
+     · serverComponentsExternalPackages
 
  ✓ Starting...
  ○ Compiling middleware ...
- ✓ Compiled middleware in 903ms
+ ✓ Compiled middleware in 989ms
  ✓ Ready in 2.2s
  ○ Compiling / ...
- ✓ Compiled / in 5.4s
- GET / 200 in 5936ms
- ○ Compiling /api/auth/register ...
- ✓ Compiled /api/auth/register in 535ms
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
-prisma:query BEGIN IMMEDIATE
-prisma:query INSERT INTO `main`.`users` (`id`, `email`, `password`, `name`, `role`, `isApproved`, `createdAt`, `updatedAt`) VALUES (?,?,?,?,?,?,?,?) RETURNING `id` AS `id`
-prisma:query INSERT INTO `main`.`patients` (`id`, `userId`) VALUES (?,?) RETURNING `id` AS `id`
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE `main`.`users`.`id` = ? LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`patients`.`id`, `main`.`patients`.`userId`, `main`.`patients`.`phone`, `main`.`patients`.`address`, `main`.`patients`.`dateOfBirth`, `main`.`patients`.`emergencyContact` FROM `main`.`patients` WHERE `main`.`patients`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`pharmacies`.`id`, `main`.`pharmacies`.`userId`, `main`.`pharmacies`.`name`, `main`.`pharmacies`.`address`, `main`.`pharmacies`.`phone`, `main`.`pharmacies`.`license`, `main`.`pharmacies`.`latitude`, `main`.`pharmacies`.`longitude`, `main`.`pharmacies`.`isApproved` FROM `main`.`pharmacies` WHERE `main`.`pharmacies`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`delivery_partners`.`id`, `main`.`delivery_partners`.`userId`, `main`.`delivery_partners`.`vehicleType`, `main`.`delivery_partners`.`licenseNumber`, `main`.`delivery_partners`.`phone`, `main`.`delivery_partners`.`address`, `main`.`delivery_partners`.`latitude`, `main`.`delivery_partners`.`longitude`, `main`.`delivery_partners`.`isAvailable`, `main`.`delivery_partners`.`isApproved` FROM `main`.`delivery_partners` WHERE `main`.`delivery_partners`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`laboratories`.`id`, `main`.`laboratories`.`userId`, `main`.`laboratories`.`name`, `main`.`laboratories`.`address`, `main`.`laboratories`.`phone`, `main`.`laboratories`.`license`, `main`.`laboratories`.`latitude`, `main`.`laboratories`.`longitude`, `main`.`laboratories`.`isApproved` FROM `main`.`laboratories` WHERE `main`.`laboratories`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`doctors`.`id`, `main`.`doctors`.`userId`, `main`.`doctors`.`specialization`, `main`.`doctors`.`qualifications`, `main`.`doctors`.`experience`, `main`.`doctors`.`consultationFee`, `main`.`doctors`.`phone`, `main`.`doctors`.`address`, `main`.`doctors`.`license`, `main`.`doctors`.`isApproved` FROM `main`.`doctors` WHERE `main`.`doctors`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`admins`.`id`, `main`.`admins`.`userId`, `main`.`admins`.`role` FROM `main`.`admins` WHERE `main`.`admins`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query COMMIT
- POST /api/auth/register 200 in 1367ms
- GET / 200 in 192ms
- GET / 200 in 421ms
+ ✓ Compiled / in 6.2s
+ HEAD / 200 in 6718ms
+ ✓ Compiled middleware in 1ms
+ ✓ Compiled middleware in 1ms
+ GET / 200 in 502ms
+ GET / 200 in 309ms
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1337ms
- GET /api/auth/session 200 in 1864ms
- POST /api/auth/_log 200 in 2196ms
- ○ Compiling /auth/signin ...
- ✓ Compiled /auth/signin in 595ms
- GET /auth/signin 200 in 850ms
- GET /api/auth/session 200 in 156ms
- GET /auth/signin 200 in 354ms
- POST /api/auth/_log 200 in 489ms
- GET /api/auth/session 200 in 292ms
- GET /auth/signin 200 in 190ms
- GET /api/auth/session 200 in 307ms
- GET /auth/signin 200 in 482ms
- POST /api/auth/_log 200 in 487ms
- GET /api/auth/session 200 in 289ms
- GET /api/auth/providers 200 in 283ms
- GET /api/auth/csrf 200 in 270ms
-prisma:query SELECT 1
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`patients`.`id`, `main`.`patients`.`userId`, `main`.`patients`.`phone`, `main`.`patients`.`address`, `main`.`patients`.`dateOfBirth`, `main`.`patients`.`emergencyContact` FROM `main`.`patients` WHERE `main`.`patients`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`pharmacies`.`id`, `main`.`pharmacies`.`userId`, `main`.`pharmacies`.`name`, `main`.`pharmacies`.`address`, `main`.`pharmacies`.`phone`, `main`.`pharmacies`.`license`, `main`.`pharmacies`.`latitude`, `main`.`pharmacies`.`longitude`, `main`.`pharmacies`.`isApproved` FROM `main`.`pharmacies` WHERE `main`.`pharmacies`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`delivery_partners`.`id`, `main`.`delivery_partners`.`userId`, `main`.`delivery_partners`.`vehicleType`, `main`.`delivery_partners`.`licenseNumber`, `main`.`delivery_partners`.`phone`, `main`.`delivery_partners`.`address`, `main`.`delivery_partners`.`latitude`, `main`.`delivery_partners`.`longitude`, `main`.`delivery_partners`.`isAvailable`, `main`.`delivery_partners`.`isApproved` FROM `main`.`delivery_partners` WHERE `main`.`delivery_partners`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`laboratories`.`id`, `main`.`laboratories`.`userId`, `main`.`laboratories`.`name`, `main`.`laboratories`.`address`, `main`.`laboratories`.`phone`, `main`.`laboratories`.`license`, `main`.`laboratories`.`latitude`, `main`.`laboratories`.`longitude`, `main`.`laboratories`.`isApproved` FROM `main`.`laboratories` WHERE `main`.`laboratories`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`doctors`.`id`, `main`.`doctors`.`userId`, `main`.`doctors`.`specialization`, `main`.`doctors`.`qualifications`, `main`.`doctors`.`experience`, `main`.`doctors`.`consultationFee`, `main`.`doctors`.`phone`, `main`.`doctors`.`address`, `main`.`doctors`.`license`, `main`.`doctors`.`isApproved` FROM `main`.`doctors` WHERE `main`.`doctors`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`admins`.`id`, `main`.`admins`.`userId`, `main`.`admins`.`role` FROM `main`.`admins` WHERE `main`.`admins`.`userId` IN (?) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials 200 in 396ms
- GET /api/auth/session 200 in 329ms
- GET /api/auth/session 200 in 262ms
- ○ Compiling /dashboard/admin ...
- ✓ Compiled /dashboard/admin in 918ms
- GET /dashboard/admin 200 in 1016ms
- ✓ Compiled /api/admin/dashboard in 257ms
- GET /api/admin/dashboard 200 in 366ms
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`name`, `main`.`users`.`email`, `main`.`users`.`role`, `main`.`users`.`createdAt` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) ORDER BY `main`.`users`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`orders`.`id` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`orders`.`id`, `main`.`orders`.`totalAmount`, `main`.`orders`.`status` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`transactions`.`id`, `main`.`transactions`.`userId`, `main`.`transactions`.`orderId`, `main`.`transactions`.`labBookingId`, `main`.`transactions`.`appointmentId`, `main`.`transactions`.`type`, `main`.`transactions`.`amount`, `main`.`transactions`.`status`, `main`.`transactions`.`paymentMethod`, `main`.`transactions`.`paymentId`, `main`.`transactions`.`description`, `main`.`transactions`.`createdAt` FROM `main`.`transactions` WHERE 1=1 ORDER BY `main`.`transactions`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`lab_bookings`.`id`, `main`.`lab_bookings`.`totalAmount`, `main`.`lab_bookings`.`commissionAmount` FROM `main`.`lab_bookings` WHERE `main`.`lab_bookings`.`status` = ? LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`appointments`.`id`, `main`.`appointments`.`consultationFee`, `main`.`appointments`.`commissionAmount` FROM `main`.`appointments` WHERE `main`.`appointments`.`status` = ? LIMIT ? OFFSET ?
+ ✓ Compiled /api/auth/[...nextauth] in 1884ms
+ GET /api/auth/session 200 in 2075ms
+ POST /api/auth/_log 200 in 2472ms
  GET / 200 in 125ms
- GET /api/auth/session 200 in 189ms
- GET /auth/signin 200 in 437ms
- POST /api/auth/_log 200 in 644ms
- GET /api/auth/session 200 in 337ms
- GET /api/auth/providers 200 in 287ms
- GET /api/auth/csrf 200 in 261ms
-prisma:query SELECT 1
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`patients`.`id`, `main`.`patients`.`userId`, `main`.`patients`.`phone`, `main`.`patients`.`address`, `main`.`patients`.`dateOfBirth`, `main`.`patients`.`emergencyContact` FROM `main`.`patients` WHERE `main`.`patients`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`pharmacies`.`id`, `main`.`pharmacies`.`userId`, `main`.`pharmacies`.`name`, `main`.`pharmacies`.`address`, `main`.`pharmacies`.`phone`, `main`.`pharmacies`.`license`, `main`.`pharmacies`.`latitude`, `main`.`pharmacies`.`longitude`, `main`.`pharmacies`.`isApproved` FROM `main`.`pharmacies` WHERE `main`.`pharmacies`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`delivery_partners`.`id`, `main`.`delivery_partners`.`userId`, `main`.`delivery_partners`.`vehicleType`, `main`.`delivery_partners`.`licenseNumber`, `main`.`delivery_partners`.`phone`, `main`.`delivery_partners`.`address`, `main`.`delivery_partners`.`latitude`, `main`.`delivery_partners`.`longitude`, `main`.`delivery_partners`.`isAvailable`, `main`.`delivery_partners`.`isApproved` FROM `main`.`delivery_partners` WHERE `main`.`delivery_partners`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`laboratories`.`id`, `main`.`laboratories`.`userId`, `main`.`laboratories`.`name`, `main`.`laboratories`.`address`, `main`.`laboratories`.`phone`, `main`.`laboratories`.`license`, `main`.`laboratories`.`latitude`, `main`.`laboratories`.`longitude`, `main`.`laboratories`.`isApproved` FROM `main`.`laboratories` WHERE `main`.`laboratories`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`doctors`.`id`, `main`.`doctors`.`userId`, `main`.`doctors`.`specialization`, `main`.`doctors`.`qualifications`, `main`.`doctors`.`experience`, `main`.`doctors`.`consultationFee`, `main`.`doctors`.`phone`, `main`.`doctors`.`address`, `main`.`doctors`.`license`, `main`.`doctors`.`isApproved` FROM `main`.`doctors` WHERE `main`.`doctors`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`admins`.`id`, `main`.`admins`.`userId`, `main`.`admins`.`role` FROM `main`.`admins` WHERE `main`.`admins`.`userId` IN (?) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials 200 in 393ms
- GET /api/auth/session 200 in 319ms
- GET /api/auth/session 200 in 264ms
- GET /dashboard/admin 200 in 124ms
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`name`, `main`.`users`.`email`, `main`.`users`.`role`, `main`.`users`.`createdAt` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) ORDER BY `main`.`users`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`orders`.`id` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`orders`.`id`, `main`.`orders`.`totalAmount`, `main`.`orders`.`status` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`transactions`.`id`, `main`.`transactions`.`userId`, `main`.`transactions`.`orderId`, `main`.`transactions`.`labBookingId`, `main`.`transactions`.`appointmentId`, `main`.`transactions`.`type`, `main`.`transactions`.`amount`, `main`.`transactions`.`status`, `main`.`transactions`.`paymentMethod`, `main`.`transactions`.`paymentId`, `main`.`transactions`.`description`, `main`.`transactions`.`createdAt` FROM `main`.`transactions` WHERE 1=1 ORDER BY `main`.`transactions`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`lab_bookings`.`id`, `main`.`lab_bookings`.`totalAmount`, `main`.`lab_bookings`.`commissionAmount` FROM `main`.`lab_bookings` WHERE `main`.`lab_bookings`.`status` = ? LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`appointments`.`id`, `main`.`appointments`.`consultationFee`, `main`.`appointments`.`commissionAmount` FROM `main`.`appointments` WHERE `main`.`appointments`.`status` = ? LIMIT ? OFFSET ?
- GET /api/admin/dashboard 200 in 311ms
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`name`, `main`.`users`.`email`, `main`.`users`.`role`, `main`.`users`.`createdAt` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) ORDER BY `main`.`users`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`orders`.`id` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`orders`.`id`, `main`.`orders`.`totalAmount`, `main`.`orders`.`status` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`transactions`.`id`, `main`.`transactions`.`userId`, `main`.`transactions`.`orderId`, `main`.`transactions`.`labBookingId`, `main`.`transactions`.`appointmentId`, `main`.`transactions`.`type`, `main`.`transactions`.`amount`, `main`.`transactions`.`status`, `main`.`transactions`.`paymentMethod`, `main`.`transactions`.`paymentId`, `main`.`transactions`.`description`, `main`.`transactions`.`createdAt` FROM `main`.`transactions` WHERE 1=1 ORDER BY `main`.`transactions`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`lab_bookings`.`id`, `main`.`lab_bookings`.`totalAmount`, `main`.`lab_bookings`.`commissionAmount` FROM `main`.`lab_bookings` WHERE `main`.`lab_bookings`.`status` = ? LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`appointments`.`id`, `main`.`appointments`.`consultationFee`, `main`.`appointments`.`commissionAmount` FROM `main`.`appointments` WHERE `main`.`appointments`.`status` = ? LIMIT ? OFFSET ?
- GET /api/admin/dashboard 200 in 297ms
- GET /dashboard/admin 200 in 179ms
- GET /api/auth/session 200 in 366ms
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`users`.`id` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`name`, `main`.`users`.`email`, `main`.`users`.`role`, `main`.`users`.`createdAt` FROM `main`.`users` WHERE (`main`.`users`.`isApproved` = ? AND `main`.`users`.`role` <> ?) ORDER BY `main`.`users`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT COUNT(*) AS `_count$_all` FROM (SELECT `main`.`orders`.`id` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?) AS `sub`
-prisma:query SELECT `main`.`orders`.`id`, `main`.`orders`.`totalAmount`, `main`.`orders`.`status` FROM `main`.`orders` WHERE 1=1 LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`transactions`.`id`, `main`.`transactions`.`userId`, `main`.`transactions`.`orderId`, `main`.`transactions`.`labBookingId`, `main`.`transactions`.`appointmentId`, `main`.`transactions`.`type`, `main`.`transactions`.`amount`, `main`.`transactions`.`status`, `main`.`transactions`.`paymentMethod`, `main`.`transactions`.`paymentId`, `main`.`transactions`.`description`, `main`.`transactions`.`createdAt` FROM `main`.`transactions` WHERE 1=1 ORDER BY `main`.`transactions`.`createdAt` DESC LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`lab_bookings`.`id`, `main`.`lab_bookings`.`totalAmount`, `main`.`lab_bookings`.`commissionAmount` FROM `main`.`lab_bookings` WHERE `main`.`lab_bookings`.`status` = ? LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`appointments`.`id`, `main`.`appointments`.`consultationFee`, `main`.`appointments`.`commissionAmount` FROM `main`.`appointments` WHERE `main`.`appointments`.`status` = ? LIMIT ? OFFSET ?
- GET /api/admin/dashboard 200 in 389ms
- GET / 200 in 151ms
- GET /api/auth/session 200 in 209ms
- GET / 200 in 394ms
- POST /api/auth/_log 200 in 474ms
- GET /api/auth/session 200 in 315ms
- GET /auth/signin 200 in 155ms
- GET /api/auth/session 200 in 299ms
- GET /api/auth/providers 200 in 283ms
- GET /api/auth/csrf 200 in 263ms
-prisma:query SELECT 1
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`patients`.`id`, `main`.`patients`.`userId`, `main`.`patients`.`phone`, `main`.`patients`.`address`, `main`.`patients`.`dateOfBirth`, `main`.`patients`.`emergencyContact` FROM `main`.`patients` WHERE `main`.`patients`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`pharmacies`.`id`, `main`.`pharmacies`.`userId`, `main`.`pharmacies`.`name`, `main`.`pharmacies`.`address`, `main`.`pharmacies`.`phone`, `main`.`pharmacies`.`license`, `main`.`pharmacies`.`latitude`, `main`.`pharmacies`.`longitude`, `main`.`pharmacies`.`isApproved` FROM `main`.`pharmacies` WHERE `main`.`pharmacies`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`delivery_partners`.`id`, `main`.`delivery_partners`.`userId`, `main`.`delivery_partners`.`vehicleType`, `main`.`delivery_partners`.`licenseNumber`, `main`.`delivery_partners`.`phone`, `main`.`delivery_partners`.`address`, `main`.`delivery_partners`.`latitude`, `main`.`delivery_partners`.`longitude`, `main`.`delivery_partners`.`isAvailable`, `main`.`delivery_partners`.`isApproved` FROM `main`.`delivery_partners` WHERE `main`.`delivery_partners`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`laboratories`.`id`, `main`.`laboratories`.`userId`, `main`.`laboratories`.`name`, `main`.`laboratories`.`address`, `main`.`laboratories`.`phone`, `main`.`laboratories`.`license`, `main`.`laboratories`.`latitude`, `main`.`laboratories`.`longitude`, `main`.`laboratories`.`isApproved` FROM `main`.`laboratories` WHERE `main`.`laboratories`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`doctors`.`id`, `main`.`doctors`.`userId`, `main`.`doctors`.`specialization`, `main`.`doctors`.`qualifications`, `main`.`doctors`.`experience`, `main`.`doctors`.`consultationFee`, `main`.`doctors`.`phone`, `main`.`doctors`.`address`, `main`.`doctors`.`license`, `main`.`doctors`.`isApproved` FROM `main`.`doctors` WHERE `main`.`doctors`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`admins`.`id`, `main`.`admins`.`userId`, `main`.`admins`.`role` FROM `main`.`admins` WHERE `main`.`admins`.`userId` IN (?) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials 200 in 360ms
- GET /api/auth/session 200 in 307ms
- GET /api/auth/session 200 in 280ms
- ○ Compiling /dashboard/patient ...
- ✓ Compiled /dashboard/patient in 666ms
- GET /dashboard/patient 200 in 755ms
- GET / 200 in 137ms
- GET /api/auth/session 200 in 197ms
- GET /auth/signin 200 in 254ms
- POST /api/auth/_log 200 in 824ms
- GET /api/auth/session 200 in 325ms
- GET /api/auth/providers 200 in 277ms
- GET /api/auth/csrf 200 in 280ms
-prisma:query SELECT 1
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`patients`.`id`, `main`.`patients`.`userId`, `main`.`patients`.`phone`, `main`.`patients`.`address`, `main`.`patients`.`dateOfBirth`, `main`.`patients`.`emergencyContact` FROM `main`.`patients` WHERE `main`.`patients`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`pharmacies`.`id`, `main`.`pharmacies`.`userId`, `main`.`pharmacies`.`name`, `main`.`pharmacies`.`address`, `main`.`pharmacies`.`phone`, `main`.`pharmacies`.`license`, `main`.`pharmacies`.`latitude`, `main`.`pharmacies`.`longitude`, `main`.`pharmacies`.`isApproved` FROM `main`.`pharmacies` WHERE `main`.`pharmacies`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`delivery_partners`.`id`, `main`.`delivery_partners`.`userId`, `main`.`delivery_partners`.`vehicleType`, `main`.`delivery_partners`.`licenseNumber`, `main`.`delivery_partners`.`phone`, `main`.`delivery_partners`.`address`, `main`.`delivery_partners`.`latitude`, `main`.`delivery_partners`.`longitude`, `main`.`delivery_partners`.`isAvailable`, `main`.`delivery_partners`.`isApproved` FROM `main`.`delivery_partners` WHERE `main`.`delivery_partners`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`laboratories`.`id`, `main`.`laboratories`.`userId`, `main`.`laboratories`.`name`, `main`.`laboratories`.`address`, `main`.`laboratories`.`phone`, `main`.`laboratories`.`license`, `main`.`laboratories`.`latitude`, `main`.`laboratories`.`longitude`, `main`.`laboratories`.`isApproved` FROM `main`.`laboratories` WHERE `main`.`laboratories`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`doctors`.`id`, `main`.`doctors`.`userId`, `main`.`doctors`.`specialization`, `main`.`doctors`.`qualifications`, `main`.`doctors`.`experience`, `main`.`doctors`.`consultationFee`, `main`.`doctors`.`phone`, `main`.`doctors`.`address`, `main`.`doctors`.`license`, `main`.`doctors`.`isApproved` FROM `main`.`doctors` WHERE `main`.`doctors`.`userId` IN (?) LIMIT ? OFFSET ?
-prisma:query SELECT `main`.`admins`.`id`, `main`.`admins`.`userId`, `main`.`admins`.`role` FROM `main`.`admins` WHERE `main`.`admins`.`userId` IN (?) LIMIT ? OFFSET ?
- POST /api/auth/callback/credentials 200 in 366ms
- GET /api/auth/session 200 in 299ms
- GET /api/auth/session 200 in 271ms
- ○ Compiling /dashboard/pharmacy ...
- ✓ Compiled /dashboard/pharmacy in 661ms
- GET /dashboard/pharmacy 200 in 750ms
- ✓ Compiled /dashboard/pharmacy/medicines in 484ms
- GET /dashboard/pharmacy/medicines 200 in 571ms
- GET / 200 in 158ms
- GET /auth/signin 200 in 143ms
- ✓ Compiled /auth/signup in 483ms
- GET /auth/signup 200 in 770ms
- GET /api/auth/signin?callbackUrl=%2Fdashboard%2Fpatient 302 in 292ms
- GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fpatient 200 in 178ms
- GET /api/auth/signin?callbackUrl=%2Fdashboard%2Fpharmacy 302 in 270ms
- GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fpharmacy 200 in 144ms
- GET /api/auth/register 405 in 276ms
- GET /api/auth/signin 302 in 282ms
- GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fpharmacy 200 in 155ms
- GET /api/auth/session 200 in 288ms
-prisma:query SELECT 1
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/register 400 in 258ms
-prisma:query SELECT `main`.`users`.`id`, `main`.`users`.`email`, `main`.`users`.`password`, `main`.`users`.`name`, `main`.`users`.`role`, `main`.`users`.`isApproved`, `main`.`users`.`createdAt`, `main`.`users`.`updatedAt` FROM `main`.`users` WHERE (`main`.`users`.`email` = ? AND 1=1) LIMIT ? OFFSET ?
- POST /api/auth/register 400 in 280ms
- HEAD / 200 in 153ms
- GET / 200 in 128ms
- GET /api/auth/session 200 in 338ms
-   Reload env: .env
-error Command failed with signal "SIGTERM".
-info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
-[?25h
+ GET /api/auth/session 200 in 260ms
+ GET / 200 in 73ms
+ GET /api/auth/signin 302 in 294ms
+ ○ Compiling /auth/signin ...
+ ✓ Compiled /auth/signin in 947ms
+ GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000 200 in 1088ms
+ POST /api/auth/callback/credentials 200 in 406ms
+ POST /api/auth/callback/credentials 200 in 263ms
+ GET /api/auth/signin?callbackUrl=%2Fapi%2Flaboratories 302 in 232ms
+ GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flaboratories 200 in 164ms
+ GET /api/auth/signin?callbackUrl=%2Fapi%2Flab-tests 302 in 302ms
+ GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flab-tests 200 in 175ms
+ GET /api/auth/signin?callbackUrl=%2Fapi%2Flab-bookings 302 in 293ms
+ GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flab-bookings 200 in 89ms
+ GET /api/auth/signin?callbackUrl=%2Fapi%2Flaboratories 302 in 313ms
+ GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flaboratories 200 in 180ms
+ GET /api/auth/signin?callbackUrl=%2Fapi%2Flab-bookings 302 in 296ms
+ GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flab-bookings 200 in 84ms
+ PUT /api/auth/signin?callbackUrl=%2Fapi%2Flab-bookings%2Ftest-booking-id 405 in 427ms
+ POST /api/auth/signin?callbackUrl=%2Fapi%2Flab-bookings 302 in 275ms
+ GET /api/auth/signin?csrf=true 302 in 231ms
+ GET /auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Flab-bookings 200 in 160ms
+ GET / 200 in 113ms
+ GET /api/auth/session 200 in 321ms
+ GET /auth/signin 200 in 308ms
+ GET / 200 in 107ms
+ GET /api/auth/session 200 in 328ms
+ GET / 200 in 167ms
+ GET /api/auth/session 200 in 306ms
+ ○ Compiling /auth/signup ...
+ ✓ Compiled /auth/signup in 869ms
+ GET / 200 in 120ms
+ GET /api/auth/session 200 in 324ms
+ GET / 200 in 71ms
+ GET / 200 in 68ms
+ GET / 200 in 62ms
+ GET / 200 in 213ms
+ GET / 200 in 60ms
+ GET / 200 in 58ms
+ GET /?x_request_source=preview 200 in 60ms
+ ✓ Compiled /favicon.ico in 339ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 589ms
+ ⚠ Cross origin request detected from rx-buddy.preview.emergentagent.com to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
