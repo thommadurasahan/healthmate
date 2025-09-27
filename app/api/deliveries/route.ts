@@ -24,11 +24,11 @@ export async function GET(request: NextRequest) {
         where.status = 'PENDING'
       } else {
         // Show assigned deliveries
-        where.deliveryPartnerId = session.user.deliveryPartner.id
+        where.deliveryPartnerId = session.user.deliveryPartner?.id
       }
     } else if (session.user.role === 'PHARMACY') {
       where.order = {
-        pharmacyId: session.user.pharmacy.id
+        pharmacyId: session.user.pharmacy?.id
       }
     } else if (session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -46,12 +46,12 @@ export async function GET(request: NextRequest) {
             patient: {
               include: {
                 user: {
-                  select: { name: true, phone: true }
+                  select: { name: true }
                 }
               }
             },
             pharmacy: {
-              select: { name: true, address: true, phone: true }
+              select: { name: true, address: true }
             },
             orderItems: {
               include: {
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
         deliveryPartner: {
           include: {
             user: {
-              select: { name: true, phone: true }
+              select: { name: true }
             }
           }
         }
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
     const updatedDelivery = await prisma.delivery.update({
       where: { id: deliveryId },
       data: {
-        deliveryPartnerId: session.user.deliveryPartner.id,
+        deliveryPartnerId: session.user.deliveryPartner?.id,
         status: 'ASSIGNED'
       },
       include: {
@@ -119,12 +119,12 @@ export async function POST(request: NextRequest) {
             patient: {
               include: {
                 user: {
-                  select: { name: true, phone: true }
+                  select: { name: true }
                 }
               }
             },
             pharmacy: {
-              select: { name: true, address: true, phone: true }
+              select: { name: true, address: true }
             }
           }
         }

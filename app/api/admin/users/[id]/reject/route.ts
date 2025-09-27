@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,8 +13,10 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     const user = await prisma.user.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!user) {
@@ -34,7 +36,7 @@ export async function PUT(
     // For now, we'll just mark as not approved rather than deleting
     // In a production system, you might want to soft delete or move to a rejected state
     await prisma.user.update({
-      where: { id: params.id },
+      where: { id },
       data: { isApproved: false }
     })
 

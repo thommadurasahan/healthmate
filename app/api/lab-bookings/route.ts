@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
 
     // Filter based on user role
     if (session.user.role === 'PATIENT') {
-      where.patientId = session.user.patient.id
+      where.patientId = session.user.patient?.id
     } else if (session.user.role === 'LABORATORY') {
-      where.laboratoryId = session.user.laboratory.id
+      where.laboratoryId = session.user.laboratory?.id
     } else if (session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -29,12 +29,12 @@ export async function GET(request: NextRequest) {
         patient: {
           include: {
             user: {
-              select: { name: true, email: true, phone: true }
+              select: { name: true, email: true }
             }
           }
         },
         laboratory: {
-          select: { name: true, address: true, phone: true }
+          select: { name: true, address: true }
         },
         labTest: {
           select: { name: true, duration: true, requirements: true }
@@ -75,6 +75,10 @@ export async function POST(request: NextRequest) {
 
     if (!labTest) {
       return NextResponse.json({ error: 'Lab test not found' }, { status: 404 })
+    }
+
+    if (!session.user.patient?.id) {
+      return NextResponse.json({ error: 'Patient profile not found' }, { status: 404 })
     }
 
     // Calculate commission

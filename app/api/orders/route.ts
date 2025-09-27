@@ -46,7 +46,17 @@ export async function GET(request: NextRequest) {
 
     const orders = await prisma.order.findMany({
       where,
-      include: {
+      select: {
+        id: true,
+        orderType: true,
+        status: true,
+        totalAmount: true,
+        commissionAmount: true,
+        netAmount: true,
+        deliveryAddress: true,
+        specialInstructions: true,
+        createdAt: true,
+        updatedAt: true,
         patient: {
           include: {
             user: {
@@ -60,7 +70,7 @@ export async function GET(request: NextRequest) {
         orderItems: {
           include: {
             medicine: {
-              select: { name: true, unit: true }
+              select: { name: true, unit: true, price: true }
             }
           }
         },
@@ -110,10 +120,33 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { pharmacyId, prescriptionId, items, deliveryAddress, specialInstructions } = body
+    const { pharmacyId, prescriptionId, items, deliveryAddress, specialInstructions, orderType } = body
 
     if (!pharmacyId || !items || items.length === 0 || !deliveryAddress) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
+    // Validate order type
+    const validOrderType = orderType || (prescriptionId ? 'PRESCRIPTION_BASED' : 'DIRECT')
+    if (!['PRESCRIPTION_BASED', 'DIRECT'].includes(validOrderType)) {
+      return NextResponse.json({ error: 'Invalid order type' }, { status: 400 })
+    }
+
+    // If prescription-based order, validate prescription exists and belongs to patient
+    if (validOrderType === 'PRESCRIPTION_BASED' && prescriptionId) {
+      const prescription = await prisma.prescription.findFirst({
+        where: {
+          id: prescriptionId,
+          patientId: patient.id,
+          status: 'PROCESSED'
+        }
+      })
+      
+      if (!prescription) {
+        return NextResponse.json({ 
+          error: 'Prescription not found or not processed' 
+        }, { status: 400 })
+      }
     }
 
     // Calculate total amount
@@ -137,7 +170,8 @@ export async function POST(request: NextRequest) {
         userId: session.user.id,
         patientId: patient.id,
         pharmacyId,
-        prescriptionId,
+        prescriptionId: validOrderType === 'PRESCRIPTION_BASED' ? prescriptionId : null,
+        orderType: validOrderType,
         totalAmount,
         commissionAmount: commission,
         netAmount,
@@ -157,7 +191,10 @@ export async function POST(request: NextRequest) {
           include: {
             medicine: true
           }
-        }
+        },
+        prescription: validOrderType === 'PRESCRIPTION_BASED' ? {
+          select: { fileName: true, status: true }
+        } : undefined
       }
     })
 

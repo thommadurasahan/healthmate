@@ -8,7 +8,7 @@ import { notifyDeliveryUpdate } from '@/lib/notifications'
 // PUT /api/deliveries/[id]/accept - Accept delivery request
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -16,7 +16,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const deliveryId = params.id
+    const { id: deliveryId } = await params
 
     // Get delivery partner details
     const deliveryPartner = await prisma.deliveryPartner.findUnique({

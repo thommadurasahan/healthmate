@@ -93,6 +93,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid availability data' }, { status: 400 })
     }
 
+    if (!session.user.doctor?.id) {
+      return NextResponse.json({ error: 'Doctor profile not found' }, { status: 404 })
+    }
+
     // Delete existing availabilities
     await prisma.doctorAvailability.deleteMany({
       where: {
@@ -103,7 +107,7 @@ export async function POST(request: NextRequest) {
     // Create new availabilities
     const createdAvailabilities = await prisma.doctorAvailability.createMany({
       data: availabilities.map((avail: any) => ({
-        doctorId: session.user.doctor.id,
+        doctorId: session.user.doctor!.id,
         dayOfWeek: avail.dayOfWeek,
         startTime: avail.startTime,
         endTime: avail.endTime,

@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -23,7 +23,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Pharmacy profile not found' }, { status: 404 })
     }
 
-    const orderId = params.id
+    const { id: orderId } = await params
     const { status } = await request.json()
 
     // Verify order belongs to pharmacy

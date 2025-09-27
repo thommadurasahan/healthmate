@@ -311,6 +311,7 @@ model Order {
   patientId      String
   pharmacyId     String
   prescriptionId String?
+  orderType      OrderType   @default(DIRECT) // New field to distinguish order types
   status         OrderStatus @default(PENDING)
   totalAmount    Float
   commissionRate Float       @default(0.05) // 5% default commission
@@ -394,6 +395,11 @@ enum PrescriptionStatus {
   PROCESSING
   PROCESSED
   REJECTED
+}
+
+enum OrderType {
+  PRESCRIPTION_BASED
+  DIRECT
 }
 
 enum OrderStatus {

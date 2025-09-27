@@ -3,13 +3,6 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { join } from 'path'
-import { readFile } from 'fs/promises'
-
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/db'
-import { join } from 'path'
 import { spawn } from 'child_process'
 
 // Real OCR implementation using Emergent LLM
@@ -144,7 +137,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Update prescription with OCR data
+    // Find matching pharmacies for the extracted medicines
+    let matchingPharmacies = []
+    if (ocrResult.medicines && ocrResult.medicines.length > 0) {
+      // Call our medicine search API internally (no location needed)
+      const medicineNames = ocrResult.medicines.map(med => med.name || med.medicine_name).filter(Boolean)
+      
+      if (medicineNames.length > 0) {
+        // Search for matching medicines across pharmacies
+        const searchResponse = await fetch(`${process.env.NEXTAUTH_URL}/api/search/medicines`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': request.headers.get('Cookie') || ''
+          },
+          body: JSON.stringify({
+            medicineNames
+          })
+        })
+        
+        if (searchResponse.ok) {
+          const searchData = await searchResponse.json()
+          matchingPharmacies = searchData.results || []
+        }
+      }
+    }
+
+    // Update prescription with OCR data and matching pharmacies
     const updatedPrescription = await prisma.prescription.update({
       where: { id: prescriptionId },
       data: {
@@ -152,6 +171,7 @@ export async function POST(request: NextRequest) {
         ocrData: JSON.stringify({
           medicines: ocrResult.medicines,
           extractedText: ocrResult.extractedText,
+          matchingPharmacies,
           processedAt: new Date().toISOString()
         })
       }
@@ -160,7 +180,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Prescription processed successfully',
       prescription: updatedPrescription,
-      medicines: ocrResult.medicines
+      medicines: ocrResult.medicines,
+      matchingPharmacies
     })
 
   } catch (error) {

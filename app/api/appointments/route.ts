@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
 
     // Filter based on user role
     if (session.user.role === 'PATIENT') {
-      where.patientId = session.user.patient.id
+      where.patientId = session.user.patient?.id
     } else if (session.user.role === 'DOCTOR') {
-      where.doctorId = session.user.doctor.id
+      where.doctorId = session.user.doctor?.id
     } else if (session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     // Create appointment
     const appointment = await prisma.appointment.create({
       data: {
-        patientId: session.user.patient.id,
+        patientId: session.user.patient?.id || '',
         doctorId,
         scheduledAt: new Date(scheduledAt),
         duration: duration || 30,

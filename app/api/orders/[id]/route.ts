@@ -6,7 +6,7 @@ import { prisma } from '@/lib/db'
 // GET /api/orders/[id] - Get specific order
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -14,8 +14,10 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     const order = await prisma.order.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         patient: {
           include: {
@@ -70,7 +72,7 @@ export async function GET(
 // PUT /api/orders/[id] - Update order status
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -81,8 +83,10 @@ export async function PUT(
     const body = await request.json()
     const { status } = body
 
+    const { id } = await params
+
     const order = await prisma.order.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { pharmacy: true, patient: true }
     })
 
@@ -96,7 +100,7 @@ export async function PUT(
     }
 
     const updatedOrder = await prisma.order.update({
-      where: { id: params.id },
+      where: { id },
       data: { status },
       include: {
         orderItems: {

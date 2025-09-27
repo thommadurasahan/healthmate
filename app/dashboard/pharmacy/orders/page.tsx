@@ -37,6 +37,7 @@ export default function PharmacyOrdersPage() {
         address: '123 Patient St, Downtown'
       },
       prescriptionId: 'RX-001',
+      orderType: 'PRESCRIPTION_BASED',
       items: [
         { name: 'Paracetamol 500mg', quantity: 20, unitPrice: 5.99, totalPrice: 119.80 },
         { name: 'Amoxicillin 250mg', quantity: 10, unitPrice: 12.50, totalPrice: 125.00 }
@@ -57,7 +58,8 @@ export default function PharmacyOrdersPage() {
         phone: '+1-555-0124',
         address: '456 Oak Ave, Midtown'
       },
-      prescriptionId: 'RX-002',
+      prescriptionId: null,
+      orderType: 'DIRECT',
       items: [
         { name: 'Cough Syrup', quantity: 1, unitPrice: 8.75, totalPrice: 8.75 }
       ],
@@ -78,6 +80,7 @@ export default function PharmacyOrdersPage() {
         address: '789 Pine Rd, Uptown'
       },
       prescriptionId: 'RX-003',
+      orderType: 'PRESCRIPTION_BASED',
       items: [
         { name: 'Vitamin D3', quantity: 30, unitPrice: 15.99, totalPrice: 479.70 },
         { name: 'Calcium Tablets', quantity: 60, unitPrice: 22.50, totalPrice: 1350.00 }
@@ -98,7 +101,8 @@ export default function PharmacyOrdersPage() {
         phone: '+1-555-0126',
         address: '321 Elm Street, Riverside'
       },
-      prescriptionId: 'RX-004',
+      prescriptionId: null,
+      orderType: 'DIRECT',
       items: [
         { name: 'Blood Pressure Medication', quantity: 30, unitPrice: 25.00, totalPrice: 750.00 },
         { name: 'Heart Supplement', quantity: 1, unitPrice: 45.00, totalPrice: 45.00 }
@@ -120,6 +124,7 @@ export default function PharmacyOrdersPage() {
         address: '654 Maple Ave, Hillside'
       },
       prescriptionId: 'RX-005',
+      orderType: 'PRESCRIPTION_BASED',
       items: [
         { name: 'Antibiotics', quantity: 14, unitPrice: 18.50, totalPrice: 259.00 },
         { name: 'Pain Relief Cream', quantity: 2, unitPrice: 12.99, totalPrice: 25.98 }
@@ -332,6 +337,7 @@ export default function PharmacyOrdersPage() {
               className="h-10 px-3 py-2 border border-input bg-transparent rounded-md text-sm min-w-[150px] dark:text-gray-300 dark:border-gray-600"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
+              aria-label="Filter by order status"
             >
               <option value="ALL">All Status</option>
               <option value="PENDING">Pending</option>
@@ -346,6 +352,7 @@ export default function PharmacyOrdersPage() {
               className="h-10 px-3 py-2 border border-input bg-transparent rounded-md text-sm min-w-[150px] dark:text-gray-300 dark:border-gray-600"
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
+              aria-label="Filter by order priority"
             >
               <option value="ALL">All Priorities</option>
               <option value="urgent">Urgent</option>
@@ -389,6 +396,13 @@ export default function PharmacyOrdersPage() {
                     </Badge>
                     <Badge className={getPriorityColor(order.priority)}>
                       {order.priority.charAt(0).toUpperCase() + order.priority.slice(1)}
+                    </Badge>
+                    <Badge variant="outline" className={
+                      order.orderType === 'PRESCRIPTION_BASED' 
+                        ? 'text-blue-600 dark:text-blue-400 border-blue-300' 
+                        : 'text-purple-600 dark:text-purple-400 border-purple-300'
+                    }>
+                      {order.orderType === 'PRESCRIPTION_BASED' ? 'With Prescription' : 'Direct Order'}
                     </Badge>
                     <Badge variant="outline" className={
                       order.paymentStatus === 'PAID' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
@@ -466,10 +480,12 @@ export default function PharmacyOrdersPage() {
                 {/* Actions */}
                 <div className="flex justify-between items-center">
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
-                      <Eye className="h-4 w-4 mr-2" />
-                      View Prescription
-                    </Button>
+                    {order.orderType === 'PRESCRIPTION_BASED' && (
+                      <Button variant="outline" size="sm">
+                        <Eye className="h-4 w-4 mr-2" />
+                        View Prescription
+                      </Button>
+                    )}
                     <Button variant="outline" size="sm">
                       <Phone className="h-4 w-4 mr-2" />
                       Contact Patient

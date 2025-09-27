@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,8 +13,10 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         pharmacy: true,
         laboratory: true,
@@ -29,7 +31,7 @@ export async function PUT(
 
     // Update user approval status
     await prisma.user.update({
-      where: { id: params.id },
+      where: { id },
       data: { isApproved: true }
     })
 

@@ -128,11 +128,18 @@ export default function PatientDashboard() {
 
   const quickActions = [
     {
-      title: 'Upload Prescription',
-      description: 'Upload your prescriptions',
+      title: 'Order with Prescription',
+      description: 'Upload prescription & find pharmacies',
       icon: Upload,
-      href: '/dashboard/patient/prescriptions',
+      href: '/dashboard/patient/order-with-prescription',
       color: 'bg-blue-500 hover:bg-blue-600'
+    },
+    {
+      title: 'Order without Prescription',
+      description: 'Browse & order medicines directly',
+      icon: Pill,
+      href: '/dashboard/patient/order-direct',
+      color: 'bg-emerald-500 hover:bg-emerald-600'
     },
     {
       title: 'View Orders',
@@ -178,11 +185,33 @@ export default function PatientDashboard() {
         </p>
       </div>
 
-      {/* Quick Actions */}
+      {/* Medicine Ordering Section */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {quickActions.map((action) => (
+        <h2 className="text-xl font-semibold mb-4">Medicine Ordering</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {quickActions.slice(0, 2).map((action) => (
+            <Link key={action.title} href={action.href}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full border-2 hover:border-primary/50">
+                <CardHeader className="text-center p-6">
+                  <div className={`inline-flex p-4 rounded-full text-white mb-3 ${action.color}`}>
+                    <action.icon className="h-8 w-8" />
+                  </div>
+                  <CardTitle className="text-xl mb-2">{action.title}</CardTitle>
+                  <CardDescription className="text-base">
+                    {action.description}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Other Services */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Other Services</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {quickActions.slice(2).map((action) => (
             <Link key={action.title} href={action.href}>
               <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                 <CardHeader className="text-center">

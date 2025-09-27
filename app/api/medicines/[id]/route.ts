@@ -6,7 +6,7 @@ import { prisma } from '@/lib/db'
 // PUT /api/medicines/[id] - Update medicine
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -17,10 +17,12 @@ export async function PUT(
     const body = await request.json()
     const { name, description, price, unit, stock, isActive } = body
 
+    const { id } = await params
+
     // Verify the medicine belongs to this pharmacy
     const existingMedicine = await prisma.medicine.findFirst({
       where: {
-        id: params.id,
+        id,
         pharmacyId: session.user.pharmacy.id
       }
     })
@@ -30,7 +32,7 @@ export async function PUT(
     }
 
     const medicine = await prisma.medicine.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(description !== undefined && { description }),
@@ -51,7 +53,7 @@ export async function PUT(
 // DELETE /api/medicines/[id] - Delete medicine
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -59,10 +61,12 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     // Verify the medicine belongs to this pharmacy
     const existingMedicine = await prisma.medicine.findFirst({
       where: {
-        id: params.id,
+        id,
         pharmacyId: session.user.pharmacy.id
       }
     })
@@ -73,7 +77,7 @@ export async function DELETE(
 
     // Soft delete by setting isActive to false
     await prisma.medicine.update({
-      where: { id: params.id },
+      where: { id },
       data: { isActive: false }
     })
 

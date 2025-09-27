@@ -6,7 +6,7 @@ import { prisma } from '@/lib/db'
 // PUT /api/deliveries/[id] - Update delivery status
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -21,11 +21,13 @@ export async function PUT(
       return NextResponse.json({ error: 'Missing status' }, { status: 400 })
     }
 
+    const { id } = await params
+
     // Verify the delivery belongs to this partner
     const delivery = await prisma.delivery.findFirst({
       where: {
-        id: params.id,
-        deliveryPartnerId: session.user.deliveryPartner.id
+        id,
+        deliveryPartnerId: session.user.deliveryPartner?.id
       }
     })
 
@@ -44,7 +46,7 @@ export async function PUT(
     }
 
     const updatedDelivery = await prisma.delivery.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         order: true

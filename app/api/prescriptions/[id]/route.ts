@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -17,7 +17,7 @@ export async function GET(
       )
     }
 
-    const prescriptionId = params.id
+    const { id } = await params
 
     // Get patient
     const patient = await prisma.patient.findUnique({
@@ -34,7 +34,7 @@ export async function GET(
     // Get prescription
     const prescription = await prisma.prescription.findFirst({
       where: {
-        id: prescriptionId,
+        id,
         patientId: patient.id
       }
     })
