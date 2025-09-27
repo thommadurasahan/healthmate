@@ -65,19 +65,24 @@ export default function OrderDirectPage() {
 
     setLoading(true)
     try {
+      console.log('🔍 Starting search for:', searchQuery)
       const response = await fetch(
         `/api/search/medicines?q=${encodeURIComponent(searchQuery)}`
       )
 
+      console.log('📡 Search response status:', response.status)
+      
       if (response.ok) {
         const data = await response.json()
+        console.log('✅ Search data received:', data)
         setSearchResults(data.results || [])
       } else {
-        console.error('Search failed')
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('❌ Search failed with status:', response.status, 'Error:', errorData)
         setSearchResults([])
       }
     } catch (error) {
-      console.error('Search error:', error)
+      console.error('❌ Search error:', error)
       setSearchResults([])
     } finally {
       setLoading(false)

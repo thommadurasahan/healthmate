@@ -9,15 +9,21 @@ import { prisma } from '@/lib/db'
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
+    console.log('🔍 Medicine search - Session:', session?.user?.email, 'Role:', session?.user?.role)
+    
     if (!session || session.user.role !== 'PATIENT') {
+      console.log('❌ Medicine search - Unauthorized access')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')
     const medicines = searchParams.get('medicines')?.split(',') || []
+    
+    console.log('🔍 Medicine search query:', query)
 
     if (!query && medicines.length === 0) {
+      console.log('❌ Medicine search - No query provided')
       return NextResponse.json({ error: 'Search query or medicine list required' }, { status: 400 })
     }
 
@@ -27,20 +33,29 @@ export async function GET(request: NextRequest) {
     }
 
     if (query) {
-      medicineWhere.name = {
-        contains: query,
-        mode: 'insensitive'
-      }
+      medicineWhere.OR = [
+        {
+          name: {
+            contains: query
+          }
+        },
+        {
+          description: {
+            contains: query
+          }
+        }
+      ]
     }
 
     if (medicines.length > 0) {
       medicineWhere.name = {
-        in: medicines,
-        mode: 'insensitive'
+        in: medicines
       }
     }
 
     // Find all medicines matching the criteria
+    console.log('🔍 Medicine search where clause:', JSON.stringify(medicineWhere))
+    
     const foundMedicines = await prisma.medicine.findMany({
       where: medicineWhere,
       include: {
@@ -55,9 +70,12 @@ export async function GET(request: NextRequest) {
         }
       }
     })
+    
+    console.log('📊 Found medicines count (before approval filter):', foundMedicines.length)
 
     // Filter only approved pharmacies
     const approvedMedicines = foundMedicines.filter(med => med.pharmacy.isApproved)
+    console.log('📊 Approved medicines count:', approvedMedicines.length)
 
     // Group medicines by pharmacy (no distance calculation)
     const pharmacyGroups = new Map()
@@ -89,6 +107,8 @@ export async function GET(request: NextRequest) {
 
     // Convert to array (no distance sorting - system default order)
     const results = Array.from(pharmacyGroups.values())
+    
+    console.log('✅ Final results:', results.length, 'pharmacies with', approvedMedicines.length, 'total medicines')
 
     return NextResponse.json({
       query,
@@ -97,8 +117,16 @@ export async function GET(request: NextRequest) {
       results
     })
   } catch (error) {
-    console.error('Error searching medicines:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('❌ Error searching medicines:', error)
+    console.error('❌ Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    })
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    }, { status: 500 })
   }
 }
 
@@ -120,8 +148,7 @@ export async function POST(request: NextRequest) {
     // Create a more flexible search for medicine names
     const medicineQueries = medicineNames.map(name => ({
       name: {
-        contains: name.trim(),
-        mode: 'insensitive'
+        contains: name.trim()
       }
     }))
 
