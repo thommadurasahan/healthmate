@@ -14,8 +14,11 @@ import {
   Truck,
   Eye,
   Star,
-  RefreshCw
+  RefreshCw,
+  X
 } from 'lucide-react'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
+import toast, { Toaster } from 'react-hot-toast'
 
 interface Order {
   id: string
@@ -55,6 +58,7 @@ export default function PatientOrdersPage() {
   const { data: session } = useSession()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null)
 
   useEffect(() => {
     if (session?.user) {
@@ -85,6 +89,36 @@ export default function PatientOrdersPage() {
       setOrders([])
     } finally {
       setLoading(false)
+    }
+  }
+
+  const cancelOrder = async (orderId: string) => {
+    setCancellingOrderId(orderId)
+    try {
+      console.log('🚫 Cancelling order:', orderId)
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: 'CANCELLED' })
+      })
+
+      if (response.ok) {
+        console.log('✅ Order cancelled successfully')
+        toast.success('Order cancelled successfully!')
+        // Refresh orders list
+        fetchOrders()
+      } else {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('❌ Failed to cancel order:', response.status, errorData)
+        toast.error(errorData.error || 'Failed to cancel order. Please try again.')
+      }
+    } catch (error) {
+      console.error('❌ Error cancelling order:', error)
+      toast.error('Failed to cancel order. Please try again.')
+    } finally {
+      setCancellingOrderId(null)
     }
   }
 
@@ -294,9 +328,42 @@ export default function PatientOrdersPage() {
                     </Button>
                   )}
                   {['PENDING', 'CONFIRMED'].includes(order.status) && (
-                    <Button variant="destructive" size="sm">
-                      Cancel Order
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          variant="destructive" 
+                          size="sm"
+                        >
+                          <X className="h-4 w-4 mr-1" />
+                          Cancel Order
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Cancel Order</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to cancel this order? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Keep Order</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => cancelOrder(order.id)}
+                            disabled={cancellingOrderId === order.id}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            {cancellingOrderId === order.id ? (
+                              <>
+                                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                                Cancelling...
+                              </>
+                            ) : (
+                              'Yes, Cancel Order'
+                            )}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   )}
                 </div>
               </CardContent>
@@ -319,6 +386,7 @@ export default function PatientOrdersPage() {
           </CardContent>
         </Card>
       )}
+      <Toaster position="top-right" />
     </div>
   )
 }

@@ -55,10 +55,21 @@ export async function GET(
     }
 
     // Check authorization
-    if (session.user.role === 'PATIENT' && order.patientId !== session.user.patient.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    if (session.user.role === 'PHARMACY' && order.pharmacyId !== session.user.pharmacy.id) {
+    if (session.user.role === 'PATIENT') {
+      const patient = await prisma.patient.findUnique({
+        where: { userId: session.user.id }
+      })
+      if (!patient || order.patientId !== patient.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+    } else if (session.user.role === 'PHARMACY') {
+      const pharmacy = await prisma.pharmacy.findUnique({
+        where: { userId: session.user.id }
+      })
+      if (!pharmacy || order.pharmacyId !== pharmacy.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+    } else if (session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -82,8 +93,10 @@ export async function PUT(
 
     const body = await request.json()
     const { status } = body
+    console.log('🔄 Updating order status to:', status)
 
     const { id } = await params
+    console.log('📦 Order ID:', id)
 
     const order = await prisma.order.findUnique({
       where: { id },
@@ -95,7 +108,29 @@ export async function PUT(
     }
 
     // Check authorization based on role and status transition
-    if (session.user.role === 'PHARMACY' && order.pharmacyId !== session.user.pharmacy.id) {
+    if (session.user.role === 'PHARMACY') {
+      // Get pharmacy profile
+      const pharmacy = await prisma.pharmacy.findUnique({
+        where: { userId: session.user.id }
+      })
+      if (!pharmacy || order.pharmacyId !== pharmacy.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+    } else if (session.user.role === 'PATIENT') {
+      // Get patient profile
+      const patient = await prisma.patient.findUnique({
+        where: { userId: session.user.id }
+      })
+      if (!patient || order.patientId !== patient.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+      // Patients can only cancel orders in PENDING or CONFIRMED status
+      if (status === 'CANCELLED' && !['PENDING', 'CONFIRMED'].includes(order.status)) {
+        return NextResponse.json({ 
+          error: 'Order cannot be cancelled at this stage' 
+        }, { status: 400 })
+      }
+    } else if (session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -117,6 +152,8 @@ export async function PUT(
       }
     })
 
+    console.log('✅ Order status updated successfully:', updatedOrder.status)
+
     // Create delivery record when order is ready for delivery
     if (status === 'READY_FOR_DELIVERY') {
       await prisma.delivery.create({
@@ -126,6 +163,7 @@ export async function PUT(
           deliveryAddress: order.deliveryAddress
         }
       })
+      console.log('🚚 Delivery record created')
     }
 
     return NextResponse.json(updatedOrder)
