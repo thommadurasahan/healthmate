@@ -9,106 +9,36 @@
 - **Backend**: Next.js API routes, NextAuth.js for authentication
 - **Database**: SQLite with Prisma ORM
 - **External**: Python OCR processing with Emergent LLM integration
+## HealthMate — concise AI contributor notes
 
-## Key Patterns & Conventions
+These are the immediately actionable, repository-specific rules and examples to make an AI coding agent productive here.
 
-### 1. Role-Based Architecture
-The system uses a single `User` table with role-specific profile tables:
-```typescript
-// Each user has ONE role and related profile
-enum UserRole { PATIENT, PHARMACY, DELIVERY_PARTNER, LABORATORY, DOCTOR, ADMIN }
-```
+- Stack snapshot: Next.js 15 (App Router) + Turbopack, TypeScript, Tailwind, Radix UI, NextAuth (JWT), Prisma + SQLite, Python OCR helper (`ocr_processor.py`). See `package.json` for scripts.
 
-**Critical**: Always include role-based access control in API routes. Check both `session.user.role` AND fetch the related profile (e.g., `patient`, `pharmacy`) to get the specific ID needed for database queries.
+- Authentication: `lib/auth.ts` injects role and related profile objects into `session.user` (patient, pharmacy, deliveryPartner, laboratory, doctor, admin). Always call `getServerSession(authOptions)` in API routes and verify both `session.user.role` and the matching profile (e.g. `prisma.patient.findUnique({ where: { userId: session.user.id } })`). Example: `app/api/prescriptions/process/route.ts`.
 
-### 2. API Route Patterns
-All API routes follow this structure:
-```typescript
-// GET endpoints filter by user role
-if (session.user.role === 'PATIENT') {
-  const patient = await prisma.patient.findUnique({ where: { userId: session.user.id } })
-  where.patientId = patient.id
-}
-```
+- API pattern: API routes live under `app/api/*` and must validate session + profile before DB actions. Use the pattern: check session -> load profile by `userId` -> apply profile-specific `where` filters (patientId/pharmacyId). See `app/api/appointments/route.ts` and `app/api/prescriptions/process/route.ts` for examples.
 
-**Always** use `getServerSession(authOptions)` for authentication in API routes, never assume user data.
+- OCR integration: Server-side code spawns the Python script (`ocr_processor.py`). Environment notes: the code expects a system Python (script uses `python3` in some places) and requires `EMERGENT_LLM_KEY` for LLM OCR. OCR outputs are stored in `prescription.ocrData` and the prescription file path is in `prescription.filePath` (uploads under `uploads/prescriptions/`). See `app/api/prescriptions/process/route.ts` for fetch-to-internal-API pattern using `NEXTAUTH_URL` and forwarding `Cookie`.
 
-### 3. Database Relationships
-- Use `userId` field in main entities for session mapping
-- Role-specific IDs (e.g., `patientId`, `pharmacyId`) for business logic
-- Commission tracking: `totalAmount`, `commissionAmount`, `netAmount` pattern
-- Approval workflow: `isApproved` boolean on non-patient roles
+- Database: Prisma schema at `prisma/schema.prisma`. Use `npx prisma db push` after changes and `npx prisma generate`. The code expects SQLite (`DATABASE_URL`). Entities often contain both `userId` and role-specific IDs (e.g., `patientId`) — query accordingly.
 
-### 4. File Upload & Processing
-- Prescription uploads trigger Python OCR processing via `ocr_processor.py`
-- OCR extracts medicine data as JSON stored in `Prescription.ocrData`
-- Use `python-shell` package to integrate Node.js ↔ Python
+- Tests & dev commands: Run dev server with `npm run dev` (Turbopack). Tests use Jest: `npm test`, `npm run test:watch`, and `npm run test:coverage`. Unit/integration tests live in `__tests__/` grouped by feature.
 
-### 5. Development Commands
-```bash
-npm run dev          # Development with Turbopack
-npm run build        # Production build with Turbopack
-npx prisma db push   # Apply schema changes
-npx prisma studio    # Database browser
-npx prisma generate  # Regenerate client
-```
+- UI & components: Reusable primitives live in `components/ui/`. Dashboard uses nested layouts under `app/dashboard/` and role-specific pages under `app/dashboard/[role]/`. Sidebar patterns live in `components/dashboard/sidebar.tsx`. Use `lib/utils.ts` (e.g., `cn()`) for Tailwind class composition.
 
-## Component Architecture
+- Inter-service calls: Server code sometimes calls internal API endpoints (fetching `${process.env.NEXTAUTH_URL}/api/...`) and forwards request cookies for auth. When implementing internal API calls prefer using internal function imports when possible; if using fetch, forward `Cookie` header as shown in `prescriptions/process/route.ts`.
 
-### Dashboard Layout
-- Uses nested layouts: `app/dashboard/layout.tsx` wraps all dashboard pages
-- `DashboardHeader` + `DashboardSidebar` provide consistent navigation
-- Role-based sidebar navigation in `components/dashboard/sidebar.tsx`
+- Security & data sensitivity: This repo contains PHI-like data. Always enforce role checks in the API layer (do not rely on client code). Double-check `isApproved` flags for non-patient roles when authorizing actions.
 
-### Authentication Flow
-- Custom NextAuth configuration in `lib/auth.ts`
-- Includes ALL role profiles in session for immediate access
-- Sign-in: `/auth/signin`, Registration: `/auth/signup`
-- Session data includes user role and related profile objects
+- Helpful file references (examples to read before editing behavior):
+  - `lib/auth.ts` — NextAuth setup & session shape
+  - `lib/db.ts` — Prisma client
+  - `app/api/prescriptions/process/route.ts` — OCR + internal API call pattern
+  - `prisma/schema.prisma` — canonical data model
+  - `components/dashboard/sidebar.tsx` and `components/search/SearchComponent.tsx` — UI / nav patterns
+  - `ocr_processor.py` — Python OCR entrypoint (external LLM integration)
 
-### UI Components
-- Radix UI primitives in `components/ui/`
-- Tailwind + `class-variance-authority` for component variants
-- Use `cn()` utility from `lib/utils.ts` for conditional classes
+- When modifying APIs: update/add tests in `__tests__/integration` or relevant workflow tests in `__tests__/workflows/` and run `npm test` before opening PR.
 
-## Critical Business Logic
-
-### Commission System
-```typescript
-// Standard 5% commission on all transactions
-const { commission, netAmount } = calculateCommission(totalAmount)
-// Store all three: totalAmount, commissionAmount, netAmount
-```
-
-### Order Workflow
-1. Patient creates order → `PENDING`
-2. Pharmacy confirms → `CONFIRMED` 
-3. Pharmacy processes → `PROCESSING`
-4. Ready for pickup → `READY_FOR_DELIVERY`
-5. Delivery assignment → `OUT_FOR_DELIVERY`
-6. Completion → `DELIVERED`
-
-### Multi-Service Platform
-- **Orders**: Medicine ordering with prescription support
-- **Lab Bookings**: Test scheduling with sample collection
-- **Appointments**: Doctor consultations with video meeting support
-- **Deliveries**: Dedicated delivery partner management
-
-## File Naming & Structure
-- API routes: `app/api/[resource]/route.ts`
-- Dynamic routes: `app/api/[resource]/[id]/route.ts`
-- Dashboard pages: `app/dashboard/[role]/page.tsx`
-- Components: `components/[category]/[name].tsx`
-
-## Environment Dependencies
-- `DATABASE_URL`: SQLite database path
-- `NEXTAUTH_SECRET`: NextAuth encryption secret
-- `EMERGENT_LLM_KEY`: For Python OCR processing
-
-## Development Workflow
-1. **Database changes**: Modify `prisma/schema.prisma` → `npx prisma db push`
-2. **New API route**: Create in `app/api/` → add role-based auth → test with session
-3. **New dashboard page**: Create in `app/dashboard/[role]/` → ensure layout inheritance
-4. **Component updates**: Use existing UI components → follow Radix patterns
-
-**Important**: This system handles sensitive medical data. Always validate user permissions at both the API and database level.
+If anything here is unclear or you'd like more examples (small code snippets for a common edit), tell me which area to expand and I will iterate.
